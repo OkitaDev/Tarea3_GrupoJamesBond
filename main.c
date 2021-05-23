@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "Librerias\TDAs\TDA_Mapa\hashmap.h"
+#include "Librerias\Interfaz\interfaz.h"
+#include "Librerias\entregas.h"
+
+int main()
+{
+	short opcion;
+	HashMap * mapaIdentificacion = createMap(10);
+	HashMap * mapaRutas = createMap(10);
+	int tamanoIdentificacion, tamanoRutas;
+
+	do
+	{
+		mostrarMenu();
+
+		//Eleccion de la opcion del menu
+		printf("\nElija una opcion: ");
+		scanf("%i", &opcion);
+		if(opcion == 0) break;
+		
+		tamanoIdentificacion = size(mapaIdentificacion);
+		tamanoRutas = size(mapaRutas);
+
+		switch(opcion)
+		{
+			case 1:
+				importarArchivo(mapaIdentificacion);
+				break;
+			case 2:
+				if(tamanoIdentificacion != 0) distanciaEntregas(mapaIdentificacion);
+				else printf(red"\nNo ha recibido entregas\n"reset);
+				break;
+			case 3:
+				if(tamanoIdentificacion != 0) entregasCercanas5(mapaIdentificacion);
+				else printf(red"\nNo ha recibido entregas\n"reset);
+				break;
+			case 4:
+				if(tamanoIdentificacion != 0) crearRuta(mapaIdentificacion,mapaRutas);
+				else printf(red"\nNo ha recibido entregas\n"reset);
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+				if(tamanoRutas != 0) mostrarRutas(mapaRutas);
+				else printf(red"\nNo ha creado rutas\n"reset);
+				break;
+			case 8:
+				break;
+			default:
+				printf(red "\nNo existe tal opcion\n" reset);
+				break;
+		}
+	}while(opcion != 0);
+
+	free(mapaIdentificacion);
+	free(mapaRutas);
+	printf("\nFin del Programa\n\n");
+	return 0;
+}
