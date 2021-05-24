@@ -47,6 +47,8 @@ int main()
 				else printf(red"\nNo ha recibido entregas\n"reset);
 				break;
 			case 5:
+				if(tamanoIdentificacion != 0) crearRutaAleatoria(mapaIdentificacion,mapaRutas);
+				else printf(red"\nNo ha recibido entregas\n"reset);
 				break;
 			case 6:
 				if(tamanoRutas != 0) mejorarRuta(mapaRutas);
