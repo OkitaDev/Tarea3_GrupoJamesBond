@@ -49,6 +49,8 @@ int main()
 			case 5:
 				break;
 			case 6:
+				if(tamanoRutas != 0) mejorarRuta(mapaRutas);
+				else printf(red"\nNo ha creado rutas\n"reset);
 				break;
 			case 7:
 				if(tamanoRutas != 0) mostrarRutas(mapaRutas);

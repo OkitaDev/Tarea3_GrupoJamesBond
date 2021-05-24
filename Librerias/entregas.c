@@ -297,8 +297,10 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	rutaCreada->distanciaTotal = 0;
 
 	int identificacion;
+	nuevaPosicion->posicion->identificacion = 0;
+	rutaCreada->arreglo[0] = nuevaPosicion;
 
-	int i = 0;
+	int i = 1;
 
 	while(posiblesEntregas != NULL)
 	{
@@ -306,7 +308,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		if(aux2 == NULL) break;
 
 		//Se muestra la lista de entregas
-		printf(blue"\nGenerando la lista de entregas: \n\n"reset);
+		printf(blue"\nGenerando la lista de entregas (lleva una distancia de %.2lf): \n\n"reset, rutaCreada->distanciaTotal);
 		while(aux2 != NULL)
 		{
 			printf("%i %.2f\n", aux2->posicion->identificacion, aux2->distancia);
@@ -351,11 +353,110 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
 }
 
+void mejorarRuta(HashMap * mapaRutas)
+{
+	char nombreRuta[20];
+	printf("\nIngrese el nombre de la ruta: ");
+	getchar();
+	scanf("%19[^\n]s", nombreRuta);
+
+	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
+
+	if(aux != NULL)
+	{
+		int identificacion1, identificacion2, posicion1 = -1, posicion2 = -1;
+
+		printf(green"\nSe encontro la ruta %s\n"reset, nombreRuta);
+		printf("Tiene un recorrido de %.2lf", aux->distanciaTotal);
+		printf("\nSu recorrido es: ");
+		
+		for(int i = 0; i < aux->largo; i++)
+			printf("%d ",aux->arreglo[i]->posicion->identificacion);
+
+		printf("\n\n");
+
+		char cambio[11];
+		printf("Ingrese si quiere un cambio automatico o manual de posicion: ");
+		scanf("%10s", cambio);
+
+		if(strcmp(cambio, "automatico") == 0)
+		{
+			identificacion1 = rand() % aux->largo;
+			do
+			{
+				identificacion2 = rand() % aux->largo;
+			} while (identificacion1 == identificacion2);
+			
+			printf("\nSe eligieron los identificadores %i y %i\n", identificacion1, identificacion2);
+		}
+		else if(strcmp(cambio, "manual") == 0)
+		{	
+			printf("\nElija la identificacion 1: ");
+			scanf("%i", &identificacion1);
+			printf("\nElija la identificacion 2: ");
+			scanf("%i", &identificacion2);
+		}
+		else
+		{
+			printf(red"\nNo se hara nada\n"reset);
+			return;
+		}
+		
+		for(int i = 0; i < aux->largo; i++)
+		{
+			if(aux->arreglo[i]->posicion->identificacion == identificacion1) posicion1 = i;
+			if(aux->arreglo[i]->posicion->identificacion == identificacion2) posicion2 = i;
+			if(posicion1 != -1 && posicion2 != -1) break;
+		}
+
+		if(posicion1 == -1 || posicion2 == -1)
+		{
+			printf(red"\nNo existe alguna de las 2 entregas ingresadas\n"reset);
+			return;
+		}
+		double distanciaActual = aux->distanciaTotal;
+		aux->distanciaTotal = 0;
+
+		tipoCamino * temp = aux->arreglo[posicion1];
+		aux->arreglo[posicion1] = aux->arreglo[posicion2];
+		aux->arreglo[posicion2] = temp;
+
+		for(int i = 0; i < aux->largo - 1; i++)
+		{
+			aux->distanciaTotal += distanciaDosPuntos(aux->arreglo[i]->posicion, aux->arreglo[i+1]->posicion);
+		}
+
+		if(aux->distanciaTotal > distanciaActual)
+		{
+				temp = aux->arreglo[posicion1];
+				aux->arreglo[posicion1] = aux->arreglo[posicion2];
+				aux->arreglo[posicion2] = temp;
+				aux->distanciaTotal = distanciaActual;
+				printf(red"\nLa ruta actual es mejor, se mantendra\n"reset);
+				return;
+		}
+		else
+		{
+			printf(green"\nLa nueva ruta es mejor, se cambiara\n");
+			printf("La nueva distancia es %.2lf\n"reset, aux->distanciaTotal);
+			printf("\nSu nuevo recorrido es: ");
+			for(int i = 0; i < aux->largo; i++)
+				printf("%d ",aux->arreglo[i]->posicion->identificacion);
+			
+			printf("\n");
+		}
+	}
+	else
+	{
+		printf(red"\nNo se ha encontrado la ruta %s\n"reset, nombreRuta);
+	}
+}
+
 void mostrarRutas(HashMap* mapaRutas)
 {
-	tipoRuta* ruta = firstMap(mapaRutas);
+	tipoRuta * ruta = firstMap(mapaRutas);
 	int i;
-	
+
 	printf(green"\nLista de rutas creadas:\n\n"reset);
 
 	//Mostrar las rutas
@@ -364,7 +465,7 @@ void mostrarRutas(HashMap* mapaRutas)
 		printf("Nombre: %s \nDistancia Total: %.2lf \nRuta: ",ruta->nombreRuta, ruta->distanciaTotal);
 		
 		for(i = 0; i < ruta->largo; i++)
-			printf("%d ",ruta->arreglo[i]->posicion->identificacion, ruta->arreglo[i]->distancia);
+			printf("%d ",ruta->arreglo[i]->posicion->identificacion);
 		
 		printf("\n");
 		ruta = nextMap(mapaRutas);
