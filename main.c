@@ -1,6 +1,8 @@
+//Librerias de C
 #include <stdio.h>
 #include <stdlib.h>
 
+//Librerias creadas por nosotros
 #include "Librerias\TDAs\TDA_Mapa\hashmap.h"
 #include "Librerias\Interfaz\interfaz.h"
 #include "Librerias\entregas.h"
@@ -8,8 +10,10 @@
 int main()
 {
 	short opcion;
+	//Creacion de mapas para guardar informacion
 	HashMap * mapaIdentificacion = createMap(10);
 	HashMap * mapaRutas = createMap(10);
+	//Funciones para almacenar el tamaño del mapa despues de cada operacion
 	int tamanoIdentificacion, tamanoRutas;
 
 	do
@@ -21,6 +25,7 @@ int main()
 		scanf("%i", &opcion);
 		if(opcion == 0) break;
 		
+		//Calculo del tamaño del mapa
 		tamanoIdentificacion = size(mapaIdentificacion);
 		tamanoRutas = size(mapaRutas);
 
@@ -57,8 +62,10 @@ int main()
 		}
 	}while(opcion != 0);
 
+	//Liberacion de Memoria
 	free(mapaIdentificacion);
 	free(mapaRutas);
+
 	printf("\nFin del Programa\n\n");
 	return 0;
 }
