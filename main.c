@@ -39,7 +39,7 @@ int main()
 				else printf(red"\nNo ha recibido entregas\n"reset);
 				break;
 			case 3:
-				if(tamanoIdentificacion != 0) entregasCercanas5(mapaIdentificacion);
+				if(tamanoIdentificacion != 0) entregasCercanas(mapaIdentificacion);
 				else printf(red"\nNo ha recibido entregas\n"reset);
 				break;
 			case 4:

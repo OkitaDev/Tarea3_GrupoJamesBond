@@ -1,35 +1,43 @@
+//Librerias de C
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
+//Librerias creadas por nosotros
 #include "TDAs\TDA_Mapa\hashmap.h"
 #include "TDAs\TDA_Lista\list.h"
 #include "Interfaz\interfaz.h"
 
+//Estructuras que vamos a usar
+
+//Estructura que almacena los valores leidos del .txt
 typedef struct tipoEntrega
 {
-	int identificacion;
-	short validacion;
+	int identificacion; 
+	short validacion; //Validar si ya se uso durante la creacion de las rutas
 	long long coordenadaX;
 	long long coordenadaY;
 }tipoEntrega;
 
+//Estructura que se almacena como posiciones de la ruta
 typedef struct tipoCamino
 {
-	tipoEntrega * posicion;
-	double distancia;
+	tipoEntrega * posicion; //Almacenar los valores de posicion y el identificador
+	double distancia; //Almacenar la distancia entre el punto actual de la persona y este
 }tipoCamino;
 
+//Estructura que sirve para almacenar la ruta completa
 typedef struct tipoRuta
 {
-	tipoCamino ** arreglo;
-	double distanciaTotal;
-	char nombreRuta[20];
-	int largo;
+	tipoCamino ** arreglo; //Almacenar las posiciones de entregas
+	double distanciaTotal; //Almacenar la distancia total recorrida
+	char nombreRuta[20]; //Almacenar el nombre de la ruta
+	int largo; //Almacenar la cantidad de entregas de la ruta
 }tipoRuta;
 
 
+//Funcion para leer la informacion del .txt y almacenar en una variable tipoEntrega
 tipoEntrega * lecturaDeInformacion(char * lineaLeida, int id)
 {
 	tipoEntrega * nuevaPosicion = malloc (sizeof(tipoEntrega));
@@ -48,12 +56,14 @@ tipoEntrega * lecturaDeInformacion(char * lineaLeida, int id)
 	return nuevaPosicion;
 }
 
+//Funcion para calcular la distancia entre dos puntos
 double distanciaDosPuntos(tipoEntrega * posicion1, tipoEntrega * posicion2)
 {
 	double distancia = sqrt(pow(posicion1->coordenadaX - posicion2->coordenadaX, 2) + pow(posicion1->coordenadaY - posicion2->coordenadaY, 2));
 	return distancia;
 }
 
+//Funcion para obtener las entregas, con sus respectivas distancias
 List * get_adj_nodes(HashMap * mapaIdentificacion, tipoCamino * nuevaPosicion)
 {
 	List * list = createList();
@@ -61,7 +71,7 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoCamino * nuevaPosicion)
 
 	while(aux != NULL)
 	{ 
-		if(aux->validacion == 0)
+		if(aux->validacion == 0) //Se ingresan unicamente los valores que no se hayan usado
 		{
 			tipoCamino * posiciones = malloc(sizeof(tipoCamino));
 			posiciones->posicion = malloc(sizeof(tipoEntrega));
@@ -75,6 +85,7 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoCamino * nuevaPosicion)
 	return list;
 }
 
+//Funcion para validar que la posicion exista (Funcion 2 y 3)
 tipoEntrega * busquedaPosicion(HashMap * mapaIdentificacion, int identificacion)
 {
 	tipoEntrega * posicionBuscada = searchMap(mapaIdentificacion, &identificacion);
@@ -88,8 +99,8 @@ tipoEntrega * busquedaPosicion(HashMap * mapaIdentificacion, int identificacion)
 
 void importarArchivo(HashMap * mapaIdentificacion)
 {
+	//Se ingresa el nombre del archivo a leer
 	char nombreArchivo[50];
-
 	printf("\nIngrese el nombre del archivo a importar: ");
 	getchar();
 	scanf("%49[^\n]s", nombreArchivo);
@@ -105,10 +116,12 @@ void importarArchivo(HashMap * mapaIdentificacion)
 
 	printf(green "\nSe encontro el archivo!\n" reset);
 
+	//Se ingresa la cantidad de lineas a leer
 	int cantLineas;
 	printf("\nIngrese la cantidad de lineas a leer: ");
 	scanf("%i", &cantLineas);
 
+	//Si se piden 0 lineas, se termina
 	if(cantLineas == 0)
 	{
 		printf(red "\nNo se leyo ninguna linea!\n" reset);
@@ -119,6 +132,7 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	char lineaLeida[100];
 	int cont = 0;
 	
+	//Lectura de las lineas
 	while(cont != cantLineas && fgets(lineaLeida, 100, archivo) != NULL)
 	{
 		tipoEntrega * nuevaPosicion = lecturaDeInformacion(lineaLeida, cont + 1);
@@ -126,6 +140,7 @@ void importarArchivo(HashMap * mapaIdentificacion)
 		cont++;
 	}
 
+	//Si hay menos lineas de la pedida, se indica el total leido
 	if(cont < cantLineas)
 	{
 		printf(blue"\nSe llego al final del archivo\n");
@@ -140,6 +155,7 @@ void distanciaEntregas(HashMap * mapaIdentificacion)
 {
 	int identificacion1, identificacion2;
 
+	//Se leen las dos entregas a usar
 	printf("\nIngrese el numero de identificacion de la entrega 1: ");
 	scanf("%i", &identificacion1);
 	tipoEntrega * entrega1 = busquedaPosicion(mapaIdentificacion, identificacion1);
@@ -152,10 +168,11 @@ void distanciaEntregas(HashMap * mapaIdentificacion)
 
 	printf(green "\nSe encontraron ambas entregas\n" reset);
 
+	//Se calcula la distancia entre las dos entregas
 	printf(green "\nLa distancia entre entregas es de %.2lf\n" reset, distanciaDosPuntos(entrega1, entrega2));
 }
 
-void entregasCercanas5(HashMap *mapaIdentificacion)
+void entregasCercanas(HashMap *mapaIdentificacion)
 {
 	//PRIMERO ENCONTRAMOS TODO LO QUE VAMOS A OCUPAR, EL ENTREGAAUX SIRVE PARA RECCORER LOS PUNTOS
 	int entrega1;
@@ -170,13 +187,13 @@ void entregasCercanas5(HashMap *mapaIdentificacion)
 
 	//AHORA DEFINIMOS TODO LO QUE NECESITAREMOS PARA ENCONTRAR LOS MAS CERCANOS
     int arreglo[5]; //identificador
-    float arreglo2[5];//distancia
+    double arreglo2[5];//distancia
 
-    float distanciaEntregas;
-    float distanciaAux;
+    double distanciaEntregas;
+    double distanciaAux;
 
     int cont = 0;
-	float maximo = 0;
+	double maximo = 0;
 	int i,k;
 
 	/*
@@ -206,11 +223,8 @@ void entregasCercanas5(HashMap *mapaIdentificacion)
 					{
 						if(distanciaEntregas < maximo)
 						{
-							//ESTOS PRINTF SON PARA VER QUIENES CAMBIAN POR CUALES
-							printf(red"ID: %d con distancia %.2lf CAMBIA CON \n"reset,arreglo[i],arreglo2[i]);
 							arreglo[i] = posicionAux->identificacion;
 							arreglo2[i] = distanciaEntregas;
-							printf(green"ID: %d con distancia %.2lf <- \n"reset,arreglo[i],arreglo2[i]);
 
 							//Encontrar otro maximo
 							maximo = 0;
@@ -227,8 +241,6 @@ void entregasCercanas5(HashMap *mapaIdentificacion)
 				//printf("\n%d cont",cont);
                 arreglo[cont] = posicionAux->identificacion;
                 arreglo2[cont] = distanciaEntregas;
-				//ESTE PRINTF ES PARA VER QUIENES SON LOS QUE SE GUARDAN PRIMERO
-				printf(green"ID: %d con distancia %.2lf \n"reset,arreglo[cont],arreglo2[cont]);
 				if(maximo < distanciaEntregas) maximo = distanciaEntregas;
             }
         }
@@ -236,8 +248,6 @@ void entregasCercanas5(HashMap *mapaIdentificacion)
 		{
             arreglo[0] = posicionAux->identificacion;
             arreglo2[0] = distanciaEntregas;
-			//ESTE PRINTF PARA VER QUIEN ES EL PRIMERO EN GUARDARSE
-			printf(blue"ID: %d con distancia %.2lf \n"reset,arreglo[0],arreglo2[0]);
 			maximo = distanciaEntregas;
         }
         distanciaAux = distanciaEntregas;
@@ -260,36 +270,43 @@ void entregasCercanas5(HashMap *mapaIdentificacion)
 
 void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
+	//Se inician las validaciones en 0
 	tipoEntrega * aux = firstMap(mapaIdentificacion);
-
 	while(aux != NULL)
 	{
 		aux->validacion = 0;
 		aux = nextMap(mapaIdentificacion);
 	}
 
+	//Se crea la variable del punto de origen
 	tipoCamino * nuevaPosicion = (tipoCamino *) malloc (sizeof(tipoCamino));
 	nuevaPosicion->posicion = malloc (sizeof(tipoEntrega));
 
+	//Se ingresan las coordenadas
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lli", &nuevaPosicion->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
 	scanf("%lli", &nuevaPosicion->posicion->coordenadaY);
 	
+	//Se genera la primera lista de entregas
 	List * posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
+	
+	//Se crea la variable para almacenar los datos, formando la ruta
 	tipoRuta * rutaCreada = malloc(sizeof(tipoRuta));
 	rutaCreada->arreglo = malloc(sizeof(tipoCamino) * size(mapaIdentificacion));
 	rutaCreada->distanciaTotal = 0;
 
-	int identificacion = 0;
+	int identificacion;
 
 	int i = 0;
+
 	while(posiblesEntregas != NULL)
 	{
 		tipoCamino * aux2 = firstList(posiblesEntregas);
 		if(aux2 == NULL) break;
 
-		printf(blue"\nGenerando la lista: \n"reset);
+		//Se muestra la lista de entregas
+		printf(blue"\nGenerando la lista de entregas: \n\n"reset);
 		while(aux2 != NULL)
 		{
 			printf("%i %.2f\n", aux2->posicion->identificacion, aux2->distancia);
@@ -299,6 +316,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		printf("\nElija una entrega: ");
 		scanf("%i", &identificacion);
 		
+		//Se busca en la lista la entrega
 		aux2 = firstList(posiblesEntregas);
 		while(aux2 != NULL)
 		{
@@ -306,17 +324,17 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 			aux2 = nextList(posiblesEntregas);
 		}
 
+		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
 		if(aux2 != NULL && aux2->posicion->validacion == 0)
 		{
 			rutaCreada->arreglo[i] = aux2;
 			rutaCreada->distanciaTotal += aux2->distancia;
 			i++;
-
 			aux2->posicion->validacion = 1;
 			nuevaPosicion = aux2;
 			posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
 		}
-		else
+		else //Si no, vuelve al principio
 		{
 			printf(red"\nNo se encuentra la entrega\n"reset);
 		}
@@ -324,10 +342,12 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 	printf(green"\nRuta Creada!\n"reset);
 	rutaCreada->largo = i;
+	//Se ingresa el nombre de la ruta
 	printf("\nIngrese un nombre para la ruta: ");
 	getchar();
 	scanf("%19[^\n]s", rutaCreada->nombreRuta);
 
+	//Se inserta en el mapa
 	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
 }
 
@@ -335,14 +355,18 @@ void mostrarRutas(HashMap* mapaRutas)
 {
 	tipoRuta* ruta = firstMap(mapaRutas);
 	int i;
+	
+	printf(green"\nLista de rutas creadas:\n\n"reset);
 
 	//Mostrar las rutas
-	while(ruta != NULL){
-		printf(green"\nNombre: %s \nDistancia Total: %.2lf \n\nID: ",ruta->nombreRuta, ruta->distanciaTotal);
-		for(i=0 ; i<ruta->largo ; i++){
+	while(ruta != NULL)
+	{
+		printf("Nombre: %s \nDistancia Total: %.2lf \nRuta: ",ruta->nombreRuta, ruta->distanciaTotal);
+		
+		for(i = 0; i < ruta->largo; i++)
 			printf("%d ",ruta->arreglo[i]->posicion->identificacion, ruta->arreglo[i]->distancia);
-		}
-		printf("\n"reset);
+		
+		printf("\n");
 		ruta = nextMap(mapaRutas);
 	}
 }
