@@ -272,10 +272,9 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	//Se genera la primera lista de entregas
 	List * posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
 	
-	printf("No se creo el tipoRuta\n");
 	//Se crea la variable para almacenar los datos, formando la ruta
 	tipoRuta * rutaCreada = crearTipoRuta(size(mapaIdentificacion));
-	printf("Se creo el tipoRuta\n");
+
 	int identificacion;
 
 	//Se ingresa la posicion de origen a la ruta
