@@ -280,6 +280,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 	//Se ingresa la posicion de origen a la ruta
 	rutaCreada->arreglo[0] = nuevaPosicion;
+	rutaCreada->arreglo[0]->identificacion = 0;
 
 	int i = 1;
 
