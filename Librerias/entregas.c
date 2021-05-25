@@ -85,7 +85,8 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	}
 
 	char lineaLeida[100];
-	int cont = 0;
+	int cont = size(mapaIdentificacion);
+	int contLineas = 0;
 	
 	//Lectura de las lineas
 	while(cont != cantLineas && fgets(lineaLeida, 100, archivo) != NULL)
@@ -93,13 +94,14 @@ void importarArchivo(HashMap * mapaIdentificacion)
 		tipoCoordenadas * nuevaPosicion = lecturaDeInformacion(lineaLeida, cont + 1);
 		insertMap(mapaIdentificacion, &nuevaPosicion->identificacion, nuevaPosicion);
 		cont++;
+		contLineas++;
 	}
 
 	//Si hay menos lineas de la pedida, se indica el total leido
-	if(cont < cantLineas)
+	if(contLineas < cantLineas)
 	{
 		printf(blue"\nSe llego al final del archivo\n");
-		printf("Se leyeron unicamente %i lineas!\n"reset, cont);
+		printf("Se leyeron unicamente %i lineas!\n"reset, contLineas);
 	}
 
 	printf(green "\nEl archivo se importo correctamente!\n" reset);
@@ -266,7 +268,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		printf(blue"\nGenerando la lista de entregas (lleva una distancia de %.2lf): \n\n"reset, rutaCreada->distanciaTotal);
 		while(aux2 != NULL)
 		{
-			printf("%i %.2f\n", aux2->posicion->identificacion, aux2->distancia);
+			printf(green "%i) " blue "%.2f\n" reset, aux2->posicion->identificacion, aux2->distancia);
 			aux2 = nextList(posiblesEntregas);
 		}
 
@@ -371,7 +373,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 	mostrarRuta(rutaCreada);
 	printf(green"\nRuta %s Creada!\n"reset, rutaCreada->nombreRuta);
-
+	
 	//Se inserta en el mapa
 	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
 }
@@ -477,7 +479,7 @@ void mostrarRutas(HashMap* mapaRutas)
 	int i;
 
 	printf(blue"\nLista de rutas creadas:\n"reset);
-
+	
 	//Mostrar las rutas
 	while(ruta != NULL)
 	{
