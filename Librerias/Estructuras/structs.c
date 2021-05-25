@@ -3,47 +3,47 @@
 #include <stdlib.h>
 
 //Estructura que almacena los valores leidos del .txt
-typedef struct tipoEntrega
+typedef struct tipoCoordenadas
 {
 	int identificacion; 
 	short validacion; //Validar si ya se uso durante la creacion de las rutas
 	long long coordenadaX;
 	long long coordenadaY;
-}tipoEntrega;
+}tipoCoordenadas;
 
 //Estructura que se almacena como posiciones de la ruta
-typedef struct tipoCamino
+typedef struct tipoEntrega
 {
-	tipoEntrega * posicion; //Almacenar los valores de posicion y el identificador
+	tipoCoordenadas * posicion; //Almacenar los valores de posicion y el identificador
 	double distancia; //Almacenar la distancia entre el punto actual de la persona y este
-}tipoCamino;
+}tipoEntrega;
 
 //Estructura que sirve para almacenar la ruta completa
 typedef struct tipoRuta
 {
-	tipoCamino ** arreglo; //Almacenar las posiciones de entregas
+	tipoEntrega ** arreglo; //Almacenar las posiciones de entregas
 	double distanciaTotal; //Almacenar la distancia total recorrida
 	char nombreRuta[20]; //Almacenar el nombre de la ruta
 	int largo; //Almacenar la cantidad de entregas de la ruta
 }tipoRuta;
 
-tipoEntrega * crearTipoEntrega()
+tipoEntrega * crearTipoCoordenadas()
 {
-    tipoEntrega * nuevo = malloc (sizeof(tipoEntrega));
+    tipoEntrega * nuevo = malloc (sizeof(tipoCoordenadas));
     return nuevo;
 }
 
-tipoCamino * crearTipoCamino()
+tipoEntrega * creartipoEntregas()
 {
-	tipoCamino * nuevo = malloc(sizeof(tipoCamino));
-	nuevo->posicion = malloc(sizeof(tipoEntrega));
+	tipoEntrega * nuevo = malloc(sizeof(tipoEntrega));
+	nuevo->posicion = malloc(sizeof(tipoCoordenadas));
     return nuevo;
 }
 
 tipoRuta * crearTipoRuta(int capacidad)
 {
     tipoRuta * nuevaRuta = malloc(sizeof(tipoRuta));
-	nuevaRuta->arreglo = malloc(sizeof(tipoCamino) * capacidad + 1);
+	nuevaRuta->arreglo = malloc(sizeof(tipoEntrega) * capacidad + 1);
     nuevaRuta->distanciaTotal = 0;
     nuevaRuta->largo = capacidad + 1;
     return nuevaRuta;
@@ -51,7 +51,7 @@ tipoRuta * crearTipoRuta(int capacidad)
 
 void cambioEntrega(tipoRuta * aux, int posicion1, int posicion2)
 {
-	tipoCamino * temp = aux->arreglo[posicion1];
+	tipoEntrega * temp = aux->arreglo[posicion1];
 	aux->arreglo[posicion1] = aux->arreglo[posicion2];
 	aux->arreglo[posicion2] = temp;
 }

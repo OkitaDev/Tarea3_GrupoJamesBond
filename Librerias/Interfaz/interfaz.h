@@ -7,5 +7,6 @@
 #define reset "\e[0m"
 
 void mostrarMenu();
+double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long long coordenadaY1, long long coordenadaY2);
 
 #endif

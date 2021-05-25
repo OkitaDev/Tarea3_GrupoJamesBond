@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 #define green "\e[1;92m" 
 #define red "\e[1;91m"
@@ -18,3 +19,9 @@ void mostrarMenu()
 	printf("0. Salir del Programa\n");
 }
 
+//Funcion para calcular la distancia entre dos puntos
+double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long long coordenadaY1, long long coordenadaY2)
+{
+	double distancia = sqrt(pow(coordenadaX1 - coordenadaX2, 2) + pow(coordenadaY1 - coordenadaY2, 2));
+	return distancia;
+}
