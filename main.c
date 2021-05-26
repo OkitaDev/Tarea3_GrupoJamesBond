@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 //Librerias creadas por nosotros
-#include "Librerias\TDAs\TDA_Mapa\hashmap.h"
-#include "Librerias\Interfaz\interfaz.h"
-#include "Librerias\entregas.h"
+#include "Librerias/TDAs/TDA_Mapa/hashmap.h"
+#include "Librerias/Interfaz/interfaz.h"
+#include "Librerias/entregas.h"
 
 int main()
 {

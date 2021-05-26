@@ -5,11 +5,11 @@
 #include <math.h>
 
 //Librerias creadas por nosotros
-#include "TDAs\TDA_Mapa\hashmap.h"
-#include "TDAs\TDA_Lista\list.h"
-#include "Estructuras\structs.h"
+#include "TDAs/TDA_Mapa/hashmap.h"
+#include "TDAs/TDA_Lista/list.h"
+#include "Estructuras/structs.h"
 #include "grafos.h"
-#include "Interfaz\interfaz.h"
+#include "Interfaz/interfaz.h"
 
 void mostrarRuta(tipoRuta * rutaCreada)
 {
