@@ -237,7 +237,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	}
 
 	//Se crea la variable del punto de origen
-	tipoEntregas * nuevaPosicion = creartipoEntregas();
+	tipoEntregas * nuevaPosicion = crearTipoEntregas();
 
 	//Se ingresan las coordenadas
 	printf("\nIngrese la coordenada X: ");
@@ -322,7 +322,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	}
 
 	//Se crea la variable del punto de origen
-	tipoEntregas * nuevaPosicion = creartipoEntregas();
+	tipoEntregas * nuevaPosicion = crearTipoEntregas();
 
 	//Se ingresan las coordenadas
 	printf("\nIngrese la coordenada X: ");

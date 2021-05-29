@@ -33,7 +33,7 @@ tipoEntrega * crearTipoCoordenadas()
     return nuevo;
 }
 
-tipoEntrega * creartipoEntregas()
+tipoEntrega * crearTipoEntregas()
 {
 	tipoEntrega * nuevo = malloc(sizeof(tipoEntrega));
 	nuevo->posicion = malloc(sizeof(tipoCoordenadas));

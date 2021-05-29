@@ -27,7 +27,7 @@ typedef struct tipoRuta
 }tipoRuta;
 
 tipoCoordenadas * crearTipoCoordenadas();
-tipoEntregas * creartipoEntregas();
+tipoEntregas * crearTipoEntregas();
 tipoRuta * crearTipoRuta(int);
 void cambioEntrega(tipoRuta *, int, int);
 

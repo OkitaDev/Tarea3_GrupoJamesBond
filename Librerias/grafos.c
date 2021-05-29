@@ -15,7 +15,7 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoEntregas * nuevaPosicion)
 	{ 
 		if(aux->validacion == 0) //Se ingresan unicamente los valores que no se hayan usado
 		{
-			tipoEntregas * posiciones = creartipoEntregas();
+			tipoEntregas * posiciones = crearTipoEntregas();
 			posiciones->distancia = distanciaDosPuntos(nuevaPosicion->posicion->coordenadaX, aux->coordenadaX, nuevaPosicion->posicion->coordenadaY, aux->coordenadaY);
 			posiciones->posicion = aux;
 			pushBack(list, posiciones);

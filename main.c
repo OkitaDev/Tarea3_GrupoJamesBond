@@ -22,7 +22,7 @@ int main()
 
 		//Eleccion de la opcion del menu
 		printf("\nElija una opcion: ");
-		scanf("%i", &opcion);
+		scanf("%hi", &opcion);
 		if(opcion == 0) break;
 		
 		//Calculo del tamaño del mapa
