@@ -133,19 +133,17 @@ void distanciaEntregas(HashMap * mapaIdentificacion)
 void entregasCercanas(HashMap *mapaIdentificacion)
 {
 	//PRIMERO ENCONTRAMOS TODO LO QUE VAMOS A OCUPAR, EL ENTREGAAUX SIRVE PARA RECCORER LOS PUNTOS
-	int entrega1;
+	long long coordenadaX, coordenadaY;
+	printf("\nIngrese la cordenada X: ");
+	scanf("%lli",&coordenadaX);
+	printf("\nIngrese la cordenada Y: ");
+	scanf("%lli",&coordenadaY);
 
-    printf("\nIngrese la identificacion de la entrega: ");
-    scanf("%i", &entrega1);
-
-    tipoCoordenadas * posicion1 = busquedaPosicion(mapaIdentificacion, entrega1);
-	if(posicion1 == NULL) return;
-    
 	tipoCoordenadas * posicionAux = firstMap(mapaIdentificacion);
 
 	//AHORA DEFINIMOS TODO LO QUE NECESITAREMOS PARA ENCONTRAR LOS MAS CERCANOS
-    int arreglo[5]; //identificador
-    double arreglo2[5];//distancia
+    int arreglo[3]; //identificador
+    double arreglo2[3];//distancia
 
     double distanciaEntregas;
     double distanciaAux;
@@ -163,18 +161,14 @@ void entregasCercanas(HashMap *mapaIdentificacion)
 
     while(posicionAux != NULL)
 	{
-        distanciaEntregas = distanciaDosPuntos(posicion1->coordenadaX, posicionAux->coordenadaX, posicion1->coordenadaY, posicionAux->coordenadaY);
-		if(distanciaEntregas == 0)
-		{
-			posicionAux = nextMap(mapaIdentificacion);
-			continue;
-		}
+        distanciaEntregas = distanciaDosPuntos(coordenadaX, posicionAux->coordenadaX, coordenadaY, posicionAux->coordenadaY);
+
         if(cont != 0)
 		{
-            if(cont > 4)
+            if(cont > 2)
 			{
 				//Recorro el arreglo distancia
-				for(i = 0 ; i < 5 ; i++)
+				for(i = 0 ; i < 3 ; i++)
 				{
 					//printf("ENTRA2\n\n");
 					if(maximo == arreglo2[i])
@@ -186,7 +180,7 @@ void entregasCercanas(HashMap *mapaIdentificacion)
 
 							//Encontrar otro maximo
 							maximo = 0;
-							for(k = 0 ; k < 5 ; k++)
+							for(k = 0 ; k < 3 ; k++)
 								if(maximo < arreglo2[k])	maximo = arreglo2[k];
 							
 							break;
@@ -208,17 +202,18 @@ void entregasCercanas(HashMap *mapaIdentificacion)
             arreglo2[0] = distanciaEntregas;
 			maximo = distanciaEntregas;
         }
-        distanciaAux = distanciaEntregas;
+        
+		distanciaAux = distanciaEntregas;
         posicionAux = nextMap(mapaIdentificacion);
 		cont++;
     }
 
 	//mostrar EL RESULTADO
-	printf(green"\n\nLas distancias mas cercanas a la posicion con id: %d",posicion1->identificacion);
+	printf(green"\n\nLas distancias mas cercanas a la posicion ingresada son:\n");
 	
-	int largo = 5; 
+	int largo = 3; 
 	//Esto sirve para cuando no hay mas de 5 lugares
-	if(cont < 5) largo = cont;
+	if(cont < 3) largo = cont;
 
 	for(i = 0 ; i < largo ; i++)
 		printf("\nID: %d con distancia %.2lf",arreglo[i],arreglo2[i]);
