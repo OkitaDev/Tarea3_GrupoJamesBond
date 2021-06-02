@@ -4,8 +4,7 @@
 //Estructura que almacena los valores leidos del .txt
 typedef struct tipoCoordenadas
 {
-	int identificacion; 
-	short validacion; //Validar si ya se uso durante la creacion de las rutas
+	int identificacion;
 	long long coordenadaX;
 	long long coordenadaY;
 }tipoCoordenadas;

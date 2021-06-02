@@ -1,26 +1,59 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Estructuras/structs.h"
 #include "Interfaz/interfaz.h"
 #include "TDAs/TDA_Lista/list.h"
 #include "TDAs/TDA_Mapa/hashmap.h"
 
-//Funcion para obtener las entregas, con sus respectivas distancias
-List * get_adj_nodes(HashMap * mapaIdentificacion, tipoEntregas * nuevaPosicion)
-{
-	List * list = createList();
-	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
+short is_valid(tipoRuta * nodo,int tamano){
+	
+	int i,k;
+	int * arregloIdentificacion = calloc(tamano,sizeof(int));
 
-	while(aux != NULL)
-	{ 
-		if(aux->validacion == 0) //Se ingresan unicamente los valores que no se hayan usado
-		{
-			tipoEntregas * posiciones = crearTipoEntregas();
-			posiciones->distancia = distanciaDosPuntos(nuevaPosicion->posicion->coordenadaX, aux->coordenadaX, nuevaPosicion->posicion->coordenadaY, aux->coordenadaY);
-			posiciones->posicion = aux;
-			pushBack(list, posiciones);
+	for(i=0 ; i<tamano ; i++){
+		if(arregloIdentificacion[nodo->arreglo[i]->posicion->identificacion] == 0) arregloIdentificacion[nodo->arreglo[i]->posicion->identificacion] = 1;
+		else return 0;
+	}
+
+	return 1;
+}
+
+tipoRuta* copia(tipoRuta* nuevaPosicion){
+	tipoRuta* posicionAux = crearTipoRuta(nuevaPosicion->largo);
+	int c;
+	for(c=0 ; c<nuevaPosicion->largo ; c++){
+		if(nuevaPosicion->arreglo[c]->posicion->identificacion == -1) break;
+		posicionAux->arreglo[c] = nuevaPosicion->arreglo[c];
+	}
+	
+	posicionAux->distanciaTotal = nuevaPosicion->distanciaTotal;
+	return posicionAux;
+}
+
+//Funcion para obtener las entregas, con sus respectivas distancias
+List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
+{
+	List* list = createList();
+	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
+	double distTotal = 0;
+	int i;
+	int largoRuta = nuevaPosicion->largo;
+
+	tipoRuta* posicionAux = crearTipoRuta(nuevaPosicion->largo);
+
+	aux = firstMap(mapaIdentificacion);
+	while(aux != NULL){
+		posicionAux = copia(nuevaPosicion);
+		//posicionAux->arreglo[nuevaPosicion->largo]->posicion->identificacion = nuevaPosicion->largo+1;
+		posicionAux->arreglo[largoRuta]->posicion = aux;
+		posicionAux->largo = largoRuta + 1;
+		posicionAux->arreglo[largoRuta-1]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
+		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta-1]->distancia;
+		if(is_valid(posicionAux,posicionAux->largo)){
+			pushBack(list,posicionAux);
 		}
-		aux = nextMap(mapaIdentificacion);
+		aux=nextMap(mapaIdentificacion);
 	}
 
 	return list;

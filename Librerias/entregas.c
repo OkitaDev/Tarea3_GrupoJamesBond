@@ -59,7 +59,7 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	printf("\nIngrese el nombre del archivo a importar: ");
 	getchar();
 	scanf("%49[^\n]s", nombreArchivo);
-	//strcpy(nombreArchivo,"tarea3_tsp.txt"); RECORDAR ELIMINARLO CUANDO SE ENTREGUE LA TAREA
+	strcpy(nombreArchivo,"tarea3_tsp.txt"); //RECORDAR ELIMINARLO CUANDO SE ENTREGUE LA TAREA
 
 	FILE * archivo = fopen(nombreArchivo, "r");
 
@@ -223,91 +223,62 @@ void entregasCercanas(HashMap *mapaIdentificacion)
 
 void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
-	//Se inician las validaciones en 0
-	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
-	while(aux != NULL)
-	{
-		aux->validacion = 0;
-		aux = nextMap(mapaIdentificacion);
-	}
+	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
-	//Se crea la variable del punto de origen
-	tipoEntregas * nuevaPosicion = crearTipoEntregas();
+	long long coords;
+	printf("\nX: ");
+	scanf("%lld",&coords);
+	nuevaRuta->arreglo[0]->posicion->coordenadaX = coords;
+	printf("Y: ");
+	scanf("%lld",&coords);
+	nuevaRuta->arreglo[0]->posicion->coordenadaY = coords;
+	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
-	//Se ingresan las coordenadas
-	printf("\nIngrese la coordenada X: ");
-	scanf("%lli", &nuevaPosicion->posicion->coordenadaX);
-	printf("\nIngrese la coordenada Y: ");
-	scanf("%lli", &nuevaPosicion->posicion->coordenadaY);
-	
-	//Se genera la primera lista de entregas
-	List * posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
-	
-	//Se crea la variable para almacenar los datos, formando la ruta
-	tipoRuta * rutaCreada = crearTipoRuta(size(mapaIdentificacion));
+	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 
-	int identificacion;
+	tipoRuta* imprimision = firstList(lista);
 
-	//Se ingresa la posicion de origen a la ruta
-	rutaCreada->arreglo[0] = nuevaPosicion;
-	rutaCreada->arreglo[0]->posicion->identificacion = 0;
+	while(imprimision != NULL){
+		//MUESTRO LAS OPCIONES
+		imprimision = firstList(lista);
+		if(imprimision == NULL) break;
 
-	int i = 1;
-
-	while(posiblesEntregas != NULL)
-	{
-		tipoEntregas * aux2 = firstList(posiblesEntregas);
-		if(aux2 == NULL) break;
-
-		//Se muestra la lista de entregas
-		printf(blue"\nGenerando la lista de entregas (lleva una distancia de %.2lf): \n\n"reset, rutaCreada->distanciaTotal);
-		while(aux2 != NULL)
-		{
-			printf(green "%i) " blue "%.2f\n" reset, aux2->posicion->identificacion, aux2->distancia);
-			aux2 = nextList(posiblesEntregas);
+		while(imprimision != NULL){
+			for(int c=0 ; c<imprimision->largo ; c++){
+				printf("(%d) ",imprimision->arreglo[c]->posicion->identificacion);
+			}
+			printf("largo: %d -Distancia total: %lf",imprimision->largo,imprimision->distanciaTotal);
+			printf("\n");
+			imprimision = nextList(lista);
 		}
-
-		printf("\nElija una entrega: ");
-		scanf("%i", &identificacion);
 		
-		//Se busca en la lista la entrega
-		aux2 = firstList(posiblesEntregas);
-		while(aux2 != NULL)
-		{
-			if(aux2->posicion->identificacion == identificacion) break;
-			aux2 = nextList(posiblesEntregas);
+
+		printf("\nEl ID que elija es: ");
+		int opcion;
+		scanf("%d",&opcion);
+
+		//BUSCO LA OPCION
+		imprimision = firstList(lista);
+		while(imprimision != NULL){
+			if(opcion == imprimision->arreglo[imprimision->largo-1]->posicion->identificacion) break;
+			imprimision = nextList(lista);
 		}
 
 		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
-		if(aux2 != NULL && aux2->posicion->validacion == 0)
-		{
-			rutaCreada->arreglo[i] = aux2;
-			rutaCreada->distanciaTotal += aux2->distancia;
-			i++;
-			aux2->posicion->validacion = 1;
-			nuevaPosicion = aux2;
-			posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
-		}
-		else //Si no, vuelve al principio
-		{
-			printf(red"\nNo se encuentra la entrega\n"reset);
-		}
+		nuevaRuta = imprimision;
+		lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+		
 	}
-
-	//Se ingresa el nombre de la ruta
-	printf("\nIngrese un nombre para la ruta: ");
-	getchar();
-	scanf("%19[^\n]s", rutaCreada->nombreRuta);
-
-	mostrarRuta(rutaCreada);
-
-	printf(green"\nRuta %s Creada!\n"reset, rutaCreada->nombreRuta);
-	//Se inserta en el mapa
-	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
+	
+	printf("\nIngrese el nombre de la nueva ruta: ");
+	scanf("%19s",nuevaRuta->nombreRuta);
+	insertMap(mapaRutas,nuevaRuta->nombreRuta,nuevaRuta);
+	
 }
 
 void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
+	/*
 	//Se inician las validaciones en 0
 	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
 	while(aux != NULL)
@@ -371,6 +342,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	
 	//Se inserta en el mapa
 	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
+	*/
 }
 
 void mejorarRuta(HashMap * mapaRutas)
