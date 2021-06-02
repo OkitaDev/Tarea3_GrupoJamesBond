@@ -31,5 +31,4 @@ tipoEntregas * crearTipoEntregas();
 tipoRuta * crearTipoRuta(int);
 void cambioEntrega(tipoRuta *, int, int);
 
-
 #endif

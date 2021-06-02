@@ -27,9 +27,9 @@ typedef struct tipoRuta
 	int largo; //Almacenar la cantidad de entregas de la ruta
 }tipoRuta;
 
-tipoEntrega * crearTipoCoordenadas()
+tipoCoordenadas * crearTipoCoordenadas()
 {
-    tipoEntrega * nuevo = malloc (sizeof(tipoCoordenadas));
+    tipoCoordenadas * nuevo = malloc (sizeof(tipoCoordenadas));
     return nuevo;
 }
 
