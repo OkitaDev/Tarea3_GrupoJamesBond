@@ -250,6 +250,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		//MUESTRO LAS OPCIONES
 		imprimision = firstList(lista);
 		if(imprimision == NULL) break;
+		
 		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, imprimision->distanciaTotal);
 		while(imprimision != NULL)
 		{
@@ -298,71 +299,49 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
-	/*
-	//Se inician las validaciones en 0
-	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
-	while(aux != NULL)
-	{
-		aux->validacion = 0;
-		aux = nextMap(mapaIdentificacion);
-	}
+	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
-	//Se crea la variable del punto de origen
-	tipoEntregas * nuevaPosicion = crearTipoEntregas();
-
-	//Se ingresan las coordenadas
 	printf("\nIngrese la coordenada X: ");
-	scanf("%lli", &nuevaPosicion->posicion->coordenadaX);
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
-	scanf("%lli", &nuevaPosicion->posicion->coordenadaY);
-	
-	//Se genera la primera lista de entregas
-	List * posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
-	
-	//Se crea la variable para almacenar los datos, formando la ruta
-	tipoRuta * rutaCreada = crearTipoRuta(size(mapaIdentificacion));
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
+	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
-	int identificacion;
-	nuevaPosicion->posicion->identificacion = 0;
-	rutaCreada->arreglo[0] = nuevaPosicion;
+	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+	tipoRuta * imprimision;
 
-	int i = 1;
-	while(posiblesEntregas != NULL)
+	do
 	{
-		identificacion = rand() % size(mapaIdentificacion) + 1;
-
-		tipoEntregas * aux2 = firstList(posiblesEntregas);
-		if(aux2 == NULL) break;
-		//Se busca en la lista la entrega
-		while(aux2 != NULL)
+		//MUESTRO LAS OPCIONES
+		imprimision = firstList(lista);
+		if(imprimision == NULL) break;
+		
+		int opcion = rand() % size(mapaIdentificacion) + 1; 
+		//BUSCO LA OPCION
+		imprimision = firstList(lista);
+		while(imprimision != NULL)
 		{
-			if(aux2->posicion->identificacion == identificacion) break;
-			aux2 = nextList(posiblesEntregas);
+			if(opcion == imprimision->arreglo[imprimision->largo-1]->posicion->identificacion) break;
+			imprimision = nextList(lista);
 		}
 
 		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
-		if(aux2 != NULL && aux2->posicion->validacion == 0)
+		if(imprimision != NULL)
 		{
-			rutaCreada->arreglo[i] = aux2;
-			rutaCreada->distanciaTotal += aux2->distancia;
-			aux2->posicion->validacion = 1;
-			nuevaPosicion = aux2;
-			posiblesEntregas = get_adj_nodes(mapaIdentificacion, nuevaPosicion);
-			i++;
-		}
-	}
-
-	//Se ingresa el nombre de la ruta
-	printf("\nIngrese un nombre para la ruta: ");
-	getchar();
-	scanf("%19[^\n]s", rutaCreada->nombreRuta);
-
-	mostrarRuta(rutaCreada);
-	printf(green"\nRuta %s Creada!\n"reset, rutaCreada->nombreRuta);
+			nuevaRuta = imprimision;
+			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+		}else imprimision = firstList(lista);
 	
-	//Se inserta en el mapa
-	insertMap(mapaRutas, rutaCreada->nombreRuta, rutaCreada);
-	*/
+	}while(imprimision != NULL);
+	
+	do
+	{
+		printf("\nIngrese el nombre de la nueva ruta: ");
+		scanf("%19s",nuevaRuta->nombreRuta);
+	} while (nombreRepetido(mapaRutas,nuevaRuta->nombreRuta) != 1);
+	
+	mostrarRuta(nuevaRuta);
+	insertMap(mapaRutas,nuevaRuta->nombreRuta,nuevaRuta);
 }
 
 void mejorarRuta(HashMap * mapaRutas)
