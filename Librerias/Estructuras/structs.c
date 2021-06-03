@@ -36,6 +36,9 @@ tipoEntregas * crearTipoEntregas()
 {
 	tipoEntregas * nuevo = malloc(sizeof(tipoEntregas));
 	nuevo->posicion = malloc(sizeof(tipoCoordenadas));
+	nuevo->posicion->coordenadaX = 0;
+	nuevo->posicion->coordenadaY = 0;
+	nuevo->posicion->identificacion = -1;
     return nuevo;
 }
 
@@ -45,9 +48,11 @@ tipoRuta * crearTipoRuta(int capacidad)
 	nuevaRuta->arreglo = malloc(sizeof(tipoEntregas) * capacidad + 1);
     nuevaRuta->distanciaTotal = 0;
     nuevaRuta->largo = 1;
-	for(int i = 0 ; i < capacidad + 1 ; i++)
-	{
+
+	int i;
+	for(i=0 ; i<capacidad+1 ; i++){
 		nuevaRuta->arreglo[i] = crearTipoEntregas();
+
 	}
     return nuevaRuta;
 }

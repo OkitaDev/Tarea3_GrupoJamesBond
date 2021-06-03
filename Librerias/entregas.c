@@ -282,6 +282,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		else 
 		{
 			printf(red"\nNo se encuentra tal entrega\n\n"reset);
+			imprimision = firstList(lista);
 		}
 	}
 	
@@ -330,6 +331,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 			nuevaRuta = imprimision;
 			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 		}
+		else imprimision = firstList(lista);
 	}
 	
 	do
