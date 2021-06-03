@@ -36,8 +36,6 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
 {
 	List* list = createList();
 	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
-	double distTotal = 0;
-	int i;
 	int largoRuta = nuevaPosicion->largo;
 
 	tipoRuta* posicionAux = crearTipoRuta(nuevaPosicion->largo);
@@ -45,14 +43,13 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
 	aux = firstMap(mapaIdentificacion);
 	while(aux != NULL){
 		posicionAux = copia(nuevaPosicion);
-		//posicionAux->arreglo[nuevaPosicion->largo]->posicion->identificacion = nuevaPosicion->largo+1;
+		
 		posicionAux->arreglo[largoRuta]->posicion = aux;
 		posicionAux->largo = largoRuta + 1;
-		posicionAux->arreglo[largoRuta-1]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
+		posicionAux->arreglo[largoRuta]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
 		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta-1]->distancia;
-		if(is_valid(posicionAux,posicionAux->largo)){
-			pushBack(list,posicionAux);
-		}
+
+		if(is_valid(posicionAux,posicionAux->largo)) pushBack(list,posicionAux);
 		aux=nextMap(mapaIdentificacion);
 	}
 

@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 
-#define green "\e[1;92m" 
 #define red "\e[1;91m"
+#define green "\e[1;92m" 
+#define yellow "\e[1;93m"
 #define blue "\e[1;94m"
 #define reset "\e[0m"
 

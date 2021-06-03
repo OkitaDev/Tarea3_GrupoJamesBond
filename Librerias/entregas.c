@@ -52,6 +52,17 @@ tipoCoordenadas * busquedaPosicion(HashMap * mapaIdentificacion, int identificac
 	return posicionBuscada;
 }
 
+short nombreRepetido(HashMap * mapaRutas, char * nombreRuta)
+{
+	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
+	if(aux != NULL)
+	{
+		printf(red"\nEl nombre ya se encuentra usado, use otro\n"reset);
+		return 0;
+	}
+	return 1;
+}
+
 void importarArchivo(HashMap * mapaIdentificacion)
 {
 	//Se ingresa el nombre del archivo a leer
@@ -225,29 +236,25 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
 	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
-	long long coords;
-	printf("\nX: ");
-	scanf("%lld",&coords);
-	nuevaRuta->arreglo[0]->posicion->coordenadaX = coords;
-	printf("Y: ");
-	scanf("%lld",&coords);
-	nuevaRuta->arreglo[0]->posicion->coordenadaY = coords;
+	printf("\nIngrese la coordenada X: ");
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
+	printf("\nIngrese la coordenada Y: ");
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+	tipoRuta * imprimision;
 
-	tipoRuta* imprimision = firstList(lista);
-
-	while(imprimision != NULL){
+	do
+	{
 		//MUESTRO LAS OPCIONES
 		imprimision = firstList(lista);
 		if(imprimision == NULL) break;
-
-		while(imprimision != NULL){
-			for(int c=0 ; c<imprimision->largo ; c++){
-				printf("(%d) ",imprimision->arreglo[c]->posicion->identificacion);
-			}
-			printf("largo: %d -Distancia total: %lf",imprimision->largo,imprimision->distanciaTotal);
+		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, imprimision->distanciaTotal);
+		while(imprimision != NULL)
+		{
+			printf(blue"%d) "reset, imprimision->arreglo[imprimision->largo - 1]->posicion->identificacion);
+			printf("Distancia : %.2lf",imprimision->arreglo[imprimision->largo - 1]->distancia);
 			printf("\n");
 			imprimision = nextList(lista);
 		}
@@ -259,19 +266,32 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 		//BUSCO LA OPCION
 		imprimision = firstList(lista);
-		while(imprimision != NULL){
+		while(imprimision != NULL)
+		{
 			if(opcion == imprimision->arreglo[imprimision->largo-1]->posicion->identificacion) break;
 			imprimision = nextList(lista);
 		}
 
 		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
-		nuevaRuta = imprimision;
-		lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-		
-	}
+		if(imprimision != NULL)
+		{
+			nuevaRuta = imprimision;
+			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+		}
+		else 
+		{
+			printf(red"\nNo se encuentra tal entrega\n\n"reset);
+			imprimision = firstList(lista);
+		}
+	}while(imprimision != NULL);
 	
-	printf("\nIngrese el nombre de la nueva ruta: ");
-	scanf("%19s",nuevaRuta->nombreRuta);
+	do
+	{
+		printf("\nIngrese el nombre de la nueva ruta: ");
+		scanf("%19s",nuevaRuta->nombreRuta);
+	} while (nombreRepetido(mapaRutas,nuevaRuta->nombreRuta) != 1);
+	
+	mostrarRuta(nuevaRuta);
 	insertMap(mapaRutas,nuevaRuta->nombreRuta,nuevaRuta);
 	
 }
