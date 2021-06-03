@@ -243,9 +243,9 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-	tipoRuta * imprimision;
+	tipoRuta * imprimision = firstList(lista);
 
-	do
+	while(imprimision != NULL)
 	{
 		//MUESTRO LAS OPCIONES
 		imprimision = firstList(lista);
@@ -282,9 +282,8 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		else 
 		{
 			printf(red"\nNo se encuentra tal entrega\n\n"reset);
-			imprimision = firstList(lista);
 		}
-	}while(imprimision != NULL);
+	}
 	
 	do
 	{
@@ -310,7 +309,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 	tipoRuta * imprimision;
 
-	do
+	while(imprimision != NULL)
 	{
 		//MUESTRO LAS OPCIONES
 		imprimision = firstList(lista);
@@ -330,9 +329,8 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		{
 			nuevaRuta = imprimision;
 			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-		}else imprimision = firstList(lista);
-	
-	}while(imprimision != NULL);
+		}
+	}
 	
 	do
 	{
