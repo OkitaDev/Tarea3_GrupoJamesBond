@@ -96,23 +96,23 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	}
 
 	char lineaLeida[100];
-	int cont = size(mapaIdentificacion);
-	int contLineas = 0;
+	int cont = 0;
+	int identificacion = size(mapaIdentificacion) + 1;
 	
 	//Lectura de las lineas
 	while(cont != cantLineas && fgets(lineaLeida, 100, archivo) != NULL)
 	{
-		tipoCoordenadas * nuevaPosicion = lecturaDeInformacion(lineaLeida, cont + 1);
+		tipoCoordenadas * nuevaPosicion = lecturaDeInformacion(lineaLeida, identificacion);
 		insertMap(mapaIdentificacion, &nuevaPosicion->identificacion, nuevaPosicion);
+		identificacion++;
 		cont++;
-		contLineas++;
 	}
 
 	//Si hay menos lineas de la pedida, se indica el total leido
-	if(contLineas < cantLineas)
+	if(cont < cantLineas)
 	{
 		printf(blue"\nSe llego al final del archivo\n");
-		printf("Se leyeron unicamente %i lineas!\n"reset, contLineas);
+		printf("Se leyeron unicamente %i lineas!\n"reset, cont);
 	}
 
 	printf(green "\nEl archivo se importo correctamente!\n" reset);
