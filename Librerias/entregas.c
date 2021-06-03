@@ -241,8 +241,9 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	printf("\nIngrese la coordenada Y: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
-
+	
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+	
 	tipoRuta * imprimision = firstList(lista);
 
 	while(imprimision != NULL)

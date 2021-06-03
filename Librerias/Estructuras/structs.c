@@ -28,29 +28,39 @@ typedef struct tipoRuta
 
 tipoCoordenadas * crearTipoCoordenadas()
 {
-    tipoCoordenadas * nuevo = malloc (sizeof(tipoCoordenadas));
-    return nuevo;
+    tipoCoordenadas * nuevo =(tipoCoordenadas*) malloc (sizeof(tipoCoordenadas));
+	if(nuevo == NULL) return NULL;
+	return nuevo;
 }
 
 tipoEntregas * crearTipoEntregas()
 {
-	tipoEntregas * nuevo = malloc(sizeof(tipoEntregas));
-	nuevo->posicion = malloc(sizeof(tipoCoordenadas));
-	nuevo->posicion->coordenadaX = 0;
-	nuevo->posicion->coordenadaY = 0;
-	nuevo->posicion->identificacion = -1;
-    return nuevo;
+	tipoEntregas * nuevo =(tipoEntregas*) malloc(sizeof(tipoEntregas));
+	if(nuevo == NULL) return NULL;
+	nuevo->posicion = crearTipoCoordenadas();
+	if(nuevo->posicion == NULL)
+	{
+		free(nuevo);
+		return NULL;
+	}
+	return nuevo;
 }
 
 tipoRuta * crearTipoRuta(int capacidad)
 {
-    tipoRuta * nuevaRuta = malloc(sizeof(tipoRuta));
-	nuevaRuta->arreglo = malloc(sizeof(tipoEntregas) * capacidad + 1);
-    nuevaRuta->distanciaTotal = 0;
+    tipoRuta * nuevaRuta =(tipoRuta*) malloc (sizeof(tipoRuta));
+	if(nuevaRuta == NULL) return NULL;
+	nuevaRuta->arreglo =(tipoEntregas**) malloc(sizeof(tipoEntregas*) * capacidad);
+    if(nuevaRuta->arreglo == NULL)
+	{
+		free(nuevaRuta);
+		return NULL;
+	}
+	nuevaRuta->distanciaTotal = 0;
     nuevaRuta->largo = 1;
 
 	int i;
-	for(i=0 ; i<capacidad+1 ; i++){
+	for(i=0 ; i<capacidad + 1; i++){
 		nuevaRuta->arreglo[i] = crearTipoEntregas();
 
 	}

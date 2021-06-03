@@ -32,7 +32,8 @@ int main()
 		switch(opcion)
 		{
 			case 1:
-				importarArchivo(mapaIdentificacion);
+				if(size(mapaIdentificacion) == 0)importarArchivo(mapaIdentificacion);
+				else printf(red"\nUsted ya ha leido un archivo!\n");
 				break;
 			case 2:
 				if(tamanoIdentificacion != 0) distanciaEntregas(mapaIdentificacion);
