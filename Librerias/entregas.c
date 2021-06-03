@@ -248,17 +248,41 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 	while(imprimision != NULL)
 	{
-		//MUESTRO LAS OPCIONES
+		//ORDENAR
+		int largoArreglo = 0;
+		
 		imprimision = firstList(lista);
 		if(imprimision == NULL) break;
-		
-		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, imprimision->distanciaTotal);
-		while(imprimision != NULL)
-		{
-			printf(blue"%d) "reset, imprimision->arreglo[imprimision->largo - 1]->posicion->identificacion);
-			printf("Distancia : %.2lf",imprimision->arreglo[imprimision->largo - 1]->distancia);
-			printf("\n");
+
+		tipoRuta* orden[size(mapaIdentificacion)];
+		while(imprimision != NULL){
+			orden[largoArreglo] = imprimision;
 			imprimision = nextList(lista);
+			largoArreglo++;
+		}
+		int b;
+		imprimision = firstList(lista);
+
+		int c;
+		tipoRuta* temp;
+		for(b=0 ; b<largoArreglo-1 ; b++){
+			for(c=b ; c<largoArreglo ; c++){
+				if(orden[c]->arreglo[orden[b]->largo-1]->distancia < orden[b]->arreglo[orden[b]->largo-1]->distancia){
+					temp = orden[c];
+					orden[c] = orden[b];
+					orden[b] = temp;
+				}
+			}
+		}
+
+
+		//MUESTRO LAS OPCIONES
+		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, orden[0]->distanciaTotal);
+		for(b = 0 ; b < largoArreglo ; b++){
+			printf(blue"%d) "reset, orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion);
+			if(orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion < 10) printf(" ");
+			printf("Distancia : %.2lf",orden[b]->arreglo[orden[b]->largo-1]->distancia);
+			printf("\n");
 		}
 		
 
