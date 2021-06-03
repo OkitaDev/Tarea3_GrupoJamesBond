@@ -9,9 +9,9 @@
 
 void mostrarMenu()
 {
-	printf(green"\n1. Importar Archivo\n");
+	printf(yellow"\n1. Importar Archivo\n");
 	printf("2. Distancia entre entregas\n");
-	printf("3. Mostrar 5 entregas mas cercanas\n");
+	printf("3. Mostrar 3 entregas mas cercanas\n");
 	printf("4. Crear Ruta de entregas\n");
 	printf("5. Generar Ruta aleatoria\n");
 	printf("6. Mejorar Ruta de entregas\n");

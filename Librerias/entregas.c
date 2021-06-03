@@ -442,15 +442,37 @@ void mejorarRuta(HashMap * mapaRutas)
 
 void mostrarRutas(HashMap* mapaRutas)
 {
+	int largo = size(mapaRutas);
 	tipoRuta * ruta = firstMap(mapaRutas);
-	int i;
+	tipoRuta * arregloRuta[largo];
+	int i = 0;
+
+	while(ruta != NULL)
+	{
+		arregloRuta[i] = ruta;
+		ruta = nextMap(mapaRutas);
+		i++;
+	}
+
+	for (int c = 0 ; c < largo - 1; c++)
+  	{
+    	for (int d = 0 ; d < largo - c - 1; d++)
+    	{
+		  	if (arregloRuta[d]->distanciaTotal > arregloRuta[d+1]->distanciaTotal)
+		  	{
+		    	tipoRuta * swap = arregloRuta[d];
+		    	arregloRuta[d] = arregloRuta[d+1];
+		    	arregloRuta[d+1] = swap;
+		  	}
+    	}
+  	}
+
 
 	printf(blue"\nLista de rutas creadas:\n"reset);
 	
 	//Mostrar las rutas
-	while(ruta != NULL)
+	for(int k = 0; k < largo;k++)
 	{
-		mostrarRuta(ruta);
-		ruta = nextMap(mapaRutas);
+		mostrarRuta(arregloRuta[k]);
 	}
 }
