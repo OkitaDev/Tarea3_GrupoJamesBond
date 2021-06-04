@@ -383,16 +383,10 @@ void mejorarRuta(HashMap * mapaRutas)
 		int identificacion1, identificacion2, posicion1 = -1, posicion2 = -1;
 
 		printf(green"\nSe encontro la ruta %s\n"reset, nombreRuta);
-		printf("Tiene un recorrido de %.2lf", aux->distanciaTotal);
-		printf("\nSu recorrido es: ");
-		
-		for(int i = 0; i < aux->largo; i++)
-			printf("%d ",aux->arreglo[i]->posicion->identificacion);
-
-		printf("\n\n");
+		mostrarRuta(aux);
 
 		char cambio[11];
-		printf("Ingrese si quiere un cambio "blue"automatico"reset" o "blue"manual"reset" de posicion: ");
+		printf("\nIngrese si quiere un cambio "blue"automatico"reset" o "blue"manual"reset" de posicion: ");
 		scanf("%10s", cambio);
 
 		if(strcmp(cambio, "automatico") == 0)
@@ -437,23 +431,25 @@ void mejorarRuta(HashMap * mapaRutas)
 
 		for(int i = 0; i < aux->largo - 1; i++)
 		{
-			aux->distanciaTotal += distanciaDosPuntos(aux->arreglo[i]->posicion->coordenadaX,aux->arreglo[i + 1]->posicion->coordenadaX,aux->arreglo[i]->posicion->coordenadaY,aux->arreglo[i + 1]->posicion->coordenadaY);
+			aux->distanciaTotal += aux->arreglo[i]->distancia = distanciaDosPuntos(aux->arreglo[i]->posicion->coordenadaX,aux->arreglo[i + 1]->posicion->coordenadaX,aux->arreglo[i]->posicion->coordenadaY,aux->arreglo[i + 1]->posicion->coordenadaY);
 		}
 
 		if(aux->distanciaTotal > distanciaActual)
 		{
+			mostrarRuta(aux);
 			cambioEntrega(aux, posicion1, posicion2);
 			aux->distanciaTotal = distanciaActual;
 			printf(red"\nLa ruta actual es mejor, se mantendra\n"reset);
-			return;
+		}
+		else if(aux->distanciaTotal == distanciaActual)
+		{
+			mostrarRuta(aux);
+			printf(blue"\nLa distancia total son iguales, pero se colocara la nueva ruta\n"reset);		
 		}
 		else
 		{
 			printf(green"\nLa nueva ruta es mejor, se cambiara\n");
-			printf("La nueva distancia es %.2lf\n"reset, aux->distanciaTotal);
-			printf("\nSu nuevo recorrido es: ");
-			for(int i = 0; i < aux->largo; i++)
-				printf("%d ",aux->arreglo[i]->posicion->identificacion);
+			mostrarRuta(aux);
 			
 			printf("\n");
 		}
