@@ -333,7 +333,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-	tipoRuta * imprimision;
+	tipoRuta * imprimision = firstList(lista);
 
 	while(imprimision != NULL)
 	{
