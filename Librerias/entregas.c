@@ -500,3 +500,16 @@ void mostrarRutas(HashMap* mapaRutas)
 		mostrarRuta(arregloRuta[k]);
 	}
 }
+
+void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
+	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
+
+	printf("\nIngrese la coordenada X: ");
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
+	printf("\nIngrese la coordenada Y: ");
+	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
+	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
+
+	Queue* cola = CreateQueue();
+	
+}

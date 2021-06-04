@@ -38,6 +38,10 @@ List * createList()
 	return lista;
 }
 
+Queue *CreateQueue(){
+	return createList();
+}
+
 //Coloca el current en la primera posicion
 void * firstList(List * list) 
 {
@@ -45,6 +49,10 @@ void * firstList(List * list)
 	
 	list->current = list->head;
   	return (void *) list->current->data;
+}
+
+void* Front(Queue* P){
+	return firstList(P);
 }
 
 //Coloca el current en la siguiente posicion
@@ -190,4 +198,12 @@ void cleanList(List * list) {
     while (list->head != NULL) {
         popFront(list);
     }
+}
+
+void PopFrontQ(Queue* P){
+	popFront(P);
+}
+
+void PushBackQ(Queue* P, void* E){
+	pushBack(P,E);
 }

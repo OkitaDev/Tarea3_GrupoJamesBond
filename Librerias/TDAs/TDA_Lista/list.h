@@ -2,6 +2,7 @@
 #define LIST_H
 
 typedef struct List List;
+typedef List Queue;
 
 typedef struct Node Node;
 
@@ -30,5 +31,12 @@ void * popBack(List * list);
 void * popCurrent(List * list);
 
 void cleanList(List * list);
+
+//cola
+Queue *CreateQueue();
+void* Front(Queue* P);
+void PopFrontQ(Queue* P);
+void PushBackQ(Queue* P, void* E);
+
 
 #endif /* List_h */
