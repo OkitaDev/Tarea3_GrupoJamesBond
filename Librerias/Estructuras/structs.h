@@ -25,9 +25,12 @@ typedef struct tipoRuta
 	int largo; //Almacenar la cantidad de entregas de la ruta
 }tipoRuta;
 
+//Funciones para crear los tipos usados
 tipoCoordenadas * crearTipoCoordenadas();
 tipoEntregas * crearTipoEntregas();
 tipoRuta * crearTipoRuta(int);
+
+//Funcion para voltear dos valores dentro del arreglo del tipoRuta
 void cambioEntrega(tipoRuta *, int, int);
 
 #endif
