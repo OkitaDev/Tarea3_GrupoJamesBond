@@ -15,9 +15,14 @@ struct List {
     Node * head;
     Node * tail;
     Node * current;
+	int size;
 };
 
 typedef List List;
+
+int get_size(List* list){
+	return list->size;
+}
 
 Node * createNode(void * data) {
     Node * new = (Node *)malloc(sizeof(Node));
@@ -35,8 +40,11 @@ List * createList()
 	lista->head = NULL;
 	lista->tail = NULL;
 	lista->current = NULL;
+	lista->size = 0;
 	return lista;
 }
+
+
 
 Queue *CreateQueue(){
 	return createList();
@@ -99,6 +107,7 @@ void pushFront(List * list, void * data)
 		list->head->prev = nodo;
 		list->head = nodo;
 	}
+	list->size++;
 }
 
 void pushBack(List * list, void * data) 
@@ -116,8 +125,8 @@ void pushBack(List * list, void * data)
 		nodo->prev = list->tail;
 		list->tail->next = nodo;
 		list->tail = nodo;
-
 	}
+	list->size++;
 }
 
 //5
@@ -152,11 +161,20 @@ void pushCurrent(List * list, void * data)
 			list->current->next = nodo;
 		}
 	}
+	list->size++;
 }
 
 void * popFront(List * list) {
-    list->current = list->head;
-    return popCurrent(list);
+	const void * auxiliar = list->current->data;
+	list->current = list->head;
+	if(list->head == list->tail){
+		list->head = NULL;
+		list->tail = NULL;
+	}else{
+		list->current->next->prev = NULL;
+		list->head = list->current->next;
+	}
+    return (void *) auxiliar;
 }
 
 void * popBack(List * list) {
@@ -170,10 +188,20 @@ void * popCurrent(List * list)
 
 	if(list->current == list->head)
 	{
-		list->current->next->prev = NULL;
-		list->head = list->current->next;
-		free(list->current);
-		list->current = list->head;
+		// printf("list: %p\n",list);
+		// printf("current: %p\n",list->current);
+		// printf("next: %p\n",list->current->next);
+		// printf("prev: %p\n",list->current->next->prev);
+		if(list->current->next == NULL){
+			list->current = NULL;
+			free(list->current);
+		}else{
+			list->current->next->prev = NULL;
+			list->head = list->current->next;
+			free(list->current);
+			list->current = list->head;
+		}
+		
 	}
 	else
 	{
@@ -190,6 +218,7 @@ void * popCurrent(List * list)
 			list->current->prev->next = list->current->next;
 		}
 	}
+	list->size--;
 
 	return (void *) auxiliar;
 }

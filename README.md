@@ -12,6 +12,8 @@ Cosas a Considerar del Código
 .\Librerias\TDAs\TDA_Lista\list.c
 .\Librerias\grafos.c .\Librerias\entregas.c main.c"
 
+RECORDATORIO: modificar el popcurrent porque modifique el popFront. Eliminar algunos comentarios basura y variables basura.
+
 Puntos de premio y de castigo:
 
 - José Osega: 0

@@ -497,8 +497,12 @@ void mostrarRutas(HashMap* mapaRutas)
 	}
 }
 
+short is_final(tipoRuta *n){
+
+}
+
 void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
-	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
+	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion)+1);
 
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
@@ -507,5 +511,59 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
 	Queue* cola = CreateQueue();
+	PushBackQ(cola,nuevaRuta);
+
+	int contador = 0;
+	int cont = 0;
+	tipoRuta** arregloRuta = malloc(sizeof(tipoRuta));
+	while(get_size(cola) != 0){
+		//printf("\n Vuelve a pasar %d\n",get_size(cola));
+		tipoRuta* n= Front(cola);
+		if(!n) break;
+		PopFrontQ(cola);
+
+		contador++;
+		List* adj = get_adj_nodes(mapaIdentificacion,n);
+		tipoRuta* aux = firstList(adj);
+		// if(!aux){
+		// 	break;
+		// }
+		while(aux){
+			PushBackQ(cola,aux);
+			aux = nextList(adj);
+		}
+
+		if(n){
+			//printf("largo: %d == %ld\n",n->largo, size(mapaIdentificacion));
+			if(n->largo == size(mapaIdentificacion)+1){
+				
+				printf("\nENTRA AL IF QUE TANTO QUERIA\n");
+				printf("[%.2lf]\n",n->distanciaTotal);
+				printf("[ ");
+				for(int i=0; i<size(mapaIdentificacion)+1 ; i++){
+					printf("%d ",n->arreglo[i]->posicion->identificacion);
+				}
+				printf("]");
+				arregloRuta[cont] = n;
+				cont++;
+			}
+		}
+	}
+	printf("\n TOTAL: %d\n",cont);
+	double minimo = 9999999999;
+	tipoRuta *eficiente;
+	for(int k=0 ; k<cont ; k++){
+		//printf("[%.2lf]\n",arregloRuta[k]->distanciaTotal);
+		if(arregloRuta[k]->distanciaTotal < minimo){
+			minimo = arregloRuta[k]->distanciaTotal;
+			eficiente = arregloRuta[k];
+		}
+	}
+	//printf("%.2lf\n",eficiente->distanciaTotal);
+	strcpy(eficiente->nombreRuta,"ruta optima");
+	//printf("%s",eficiente->nombreRuta);
+	mostrarRuta(eficiente);
+	insertMap(mapaRutas,eficiente->nombreRuta,eficiente);
 	
+
 }

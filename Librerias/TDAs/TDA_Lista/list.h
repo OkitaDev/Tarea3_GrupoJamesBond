@@ -6,6 +6,8 @@ typedef List Queue;
 
 typedef struct Node Node;
 
+int get_size(List* list);
+
 Node * createNode(void * data);
 
 List * createList(void);
