@@ -11,9 +11,10 @@
 #include "grafos.h"
 #include "Interfaz/interfaz.h"
 
+//Funcion para mostrar la información dentro del tipoRuta
 void mostrarRuta(tipoRuta * rutaCreada)
 {
-	printf(green"\nRuta %s\nRecorrido: "reset, rutaCreada->nombreRuta);
+	printf(green"\nRuta %s\nRecorrido: ", rutaCreada->nombreRuta);
 	for(int k = 0; k < rutaCreada->largo; k++)
 	{
 		printf(blue"%i ", rutaCreada->arreglo[k]->posicion->identificacion);
@@ -52,6 +53,7 @@ tipoCoordenadas * busquedaPosicion(HashMap * mapaIdentificacion, int identificac
 	return posicionBuscada;
 }
 
+//Funcion para verficar que en el mapa no se encuentren nombres repetidos
 short nombreRepetido(HashMap * mapaRutas, char * nombreRuta)
 {
 	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
@@ -72,8 +74,8 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	scanf("%49[^\n]s", nombreArchivo);
 	strcpy(nombreArchivo,"tarea3_tsp.txt"); //RECORDAR ELIMINARLO CUANDO SE ENTREGUE LA TAREA
 
+	//Se busca el archivo
 	FILE * archivo = fopen(nombreArchivo, "r");
-
 	if(archivo == NULL)
 	{
 		printf(red "\nNo se encontro el archivo!\n" reset);
@@ -97,14 +99,12 @@ void importarArchivo(HashMap * mapaIdentificacion)
 
 	char lineaLeida[100];
 	int cont = 0;
-	int identificacion = size(mapaIdentificacion) + 1;
 	
 	//Lectura de las lineas
 	while(cont != cantLineas && fgets(lineaLeida, 100, archivo) != NULL)
 	{
-		tipoCoordenadas * nuevaPosicion = lecturaDeInformacion(lineaLeida, identificacion);
+		tipoCoordenadas * nuevaPosicion = lecturaDeInformacion(lineaLeida, cont + 1);
 		insertMap(mapaIdentificacion, &nuevaPosicion->identificacion, nuevaPosicion);
-		identificacion++;
 		cont++;
 	}
 
@@ -324,24 +324,29 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
+	//Se crea la ruta que almacenera
 	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
+	//Se leen las coordenadas de la posicion inicial
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
+	//Se crea la primera lista de nodos adyacentes
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 	tipoRuta * imprimision = firstList(lista);
 
 	while(imprimision != NULL)
 	{
-		//MUESTRO LAS OPCIONES
+		//Reviso que hayan posibles nodos dentro de la lista
 		imprimision = firstList(lista);
 		if(imprimision == NULL) break;
 		
-		int opcion = rand() % size(mapaIdentificacion) + 1; 
+		//Genero una posible entrega aleatoria
+		int opcion = rand() % size(mapaIdentificacion) + 1;
+
 		//BUSCO LA OPCION
 		imprimision = firstList(lista);
 		while(imprimision != NULL)
@@ -371,36 +376,42 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 void mejorarRuta(HashMap * mapaRutas)
 {
+	//Ingreso el nombre de la ruta a buscar
 	char nombreRuta[20];
 	printf("\nIngrese el nombre de la ruta: ");
 	getchar();
 	scanf("%19[^\n]s", nombreRuta);
 
+	//La busco dentro del mapa
 	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
 
 	if(aux != NULL)
 	{
+		//Genero variables auxiliares dentro de la busqueda de posiciones en la ruta
 		int identificacion1, identificacion2, posicion1 = -1, posicion2 = -1;
 
 		printf(green"\nSe encontro la ruta %s\n"reset, nombreRuta);
 		mostrarRuta(aux);
 
+		//Se ingresa que tipo de cambio quiere hacer
 		char cambio[11];
 		printf("\nIngrese si quiere un cambio "blue"automatico"reset" o "blue"manual"reset" de posicion: ");
 		scanf("%10s", cambio);
 
 		if(strcmp(cambio, "automatico") == 0)
 		{
+			//Se usa la funcion rand, para generar numeros aleatorios
 			identificacion1 = rand() % aux->largo;
 			do
 			{
 				identificacion2 = rand() % aux->largo;
-			} while (identificacion1 == identificacion2);
+			} while (identificacion1 == identificacion2); //Verificando que sean numeros distintos entre ellos
 			
 			printf("\nSe eligieron los identificadores %i y %i\n", identificacion1, identificacion2);
 		}
 		else if(strcmp(cambio, "manual") == 0)
-		{	
+		{
+			//El usuario ingresa las identificaciones a cambiar	
 			printf("\nElija la identificacion 1: ");
 			scanf("%i", &identificacion1);
 			printf("\nElija la identificacion 2: ");
@@ -412,6 +423,7 @@ void mejorarRuta(HashMap * mapaRutas)
 			return;
 		}
 		
+		//Se busca dentro del arreglo, las identificaciones que se ingresaron
 		for(int i = 0; i < aux->largo; i++)
 		{
 			if(aux->arreglo[i]->posicion->identificacion == identificacion1) posicion1 = i;
@@ -419,34 +431,35 @@ void mejorarRuta(HashMap * mapaRutas)
 			if(posicion1 != -1 && posicion2 != -1) break;
 		}
 
-		if(posicion1 == -1 || posicion2 == -1)
+		if(posicion1 == -1 || posicion2 == -1) //Si ninguna existe termina
 		{
 			printf(red"\nNo existe alguna de las 2 entregas ingresadas\n"reset);
 			return;
 		}
 
-		cambioEntrega(aux, posicion1, posicion2);
-		double distanciaActual = aux->distanciaTotal;
-		aux->distanciaTotal = 0;
-
+		cambioEntrega(aux, posicion1, posicion2); //Se cambian de posicion
+		double distanciaActual = aux->distanciaTotal; //Se almacena la distancia original
+		
+		//Se calcula la distancia total, con las posiciones cambiadas
+		aux->distanciaTotal = 0; 
 		for(int i = 0; i < aux->largo - 1; i++)
 		{
 			aux->distanciaTotal += aux->arreglo[i]->distancia = distanciaDosPuntos(aux->arreglo[i]->posicion->coordenadaX,aux->arreglo[i + 1]->posicion->coordenadaX,aux->arreglo[i]->posicion->coordenadaY,aux->arreglo[i + 1]->posicion->coordenadaY);
 		}
 
-		if(aux->distanciaTotal > distanciaActual)
+		if(aux->distanciaTotal > distanciaActual) //Si la distancia nueva es peor a la original, se mantiene la ruta original
 		{
 			mostrarRuta(aux);
 			cambioEntrega(aux, posicion1, posicion2);
 			aux->distanciaTotal = distanciaActual;
 			printf(red"\nLa ruta actual es mejor, se mantendra\n"reset);
 		}
-		else if(aux->distanciaTotal == distanciaActual)
+		else if(aux->distanciaTotal == distanciaActual) //Si es igual, se mantiene la nueva ruta
 		{
 			mostrarRuta(aux);
 			printf(blue"\nLa distancia total son iguales, pero se colocara la nueva ruta\n"reset);		
 		}
-		else
+		else //Si no, se mantiene la nueva ruta
 		{
 			printf(green"\nLa nueva ruta es mejor, se cambiara\n");
 			mostrarRuta(aux);
@@ -462,18 +475,20 @@ void mejorarRuta(HashMap * mapaRutas)
 
 void mostrarRutas(HashMap* mapaRutas)
 {
-	int largo = size(mapaRutas);
+	int largo = size(mapaRutas); 
 	tipoRuta * ruta = firstMap(mapaRutas);
 	tipoRuta * arregloRuta[largo];
 	int i = 0;
 
-	while(ruta != NULL)
+	//Se ingresa la informacion a un arreglo que almacena los tipos ruta
+	while(ruta != NULL) 
 	{
 		arregloRuta[i] = ruta;
 		ruta = nextMap(mapaRutas);
 		i++;
 	}
 
+	//Se ordenan de menor a mayor
 	for (int c = 0 ; c < largo - 1; c++)
   	{
     	for (int d = 0 ; d < largo - c - 1; d++)
@@ -488,9 +503,8 @@ void mostrarRutas(HashMap* mapaRutas)
   	}
 
 
+  	//Se muestran todas las rutas
 	printf(blue"\nLista de rutas creadas:\n"reset);
-	
-	//Mostrar las rutas
 	for(int k = 0; k < largo;k++)
 	{
 		mostrarRuta(arregloRuta[k]);
