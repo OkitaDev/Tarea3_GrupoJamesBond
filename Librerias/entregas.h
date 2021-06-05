@@ -13,8 +13,10 @@ void entregasCercanas(HashMap *);
 //Funcion para crear una ruta hecha por el usuario
 void crearRuta(HashMap *, HashMap *);
 
+//Funcion para crear una ruta aleatoria
 void crearRutaAleatoria(HashMap *, HashMap *);
 
+//Funcion para mejorar la ruta ingresada de forma manual o automatica
 void mejorarRuta(HashMap *);
 
 //Funcion para mostrar todas las rutas creadas
