@@ -497,73 +497,75 @@ void mostrarRutas(HashMap* mapaRutas)
 	}
 }
 
-short is_final(tipoRuta *n){
-
-}
-
 void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion)+1);
 
+	//Se inserta la primera posicion en la tipoRuta "nuevaRuta"
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 
+	//Se crea la cola para hacer una busqueda por anchura
 	Queue* cola = CreateQueue();
 	PushBackQ(cola,nuevaRuta);
 
-	int contador = 0;
-	int cont = 0;
+	
+	int cont = 0; //Llevara la cuenta para saber cuantas rutas fueron creadas
+	//En arregloRuta se insertaran las ultimas rutas creadas, las cuales seran quienes
+	//tengan todas las posiciones guardadas.
 	tipoRuta** arregloRuta = malloc(sizeof(tipoRuta));
+
 	while(get_size(cola) != 0){
-		//printf("\n Vuelve a pasar %d\n",get_size(cola));
+		//El tipoRuta n sera un auxiliar para ver los nodos adjacentes y para
+		//verificar si es una ruta valida para insertar al arregloRuta
 		tipoRuta* n= Front(cola);
 		if(!n) break;
 		PopFrontQ(cola);
 
-		contador++;
-		List* adj = get_adj_nodes(mapaIdentificacion,n);
-		tipoRuta* aux = firstList(adj);
-		// if(!aux){
-		// 	break;
-		// }
+		List* adj = get_adj_nodes(mapaIdentificacion,n); //Obtenemos los nodos adjacentes de n
+		tipoRuta* aux = firstList(adj); //Esta ruta es solamente para insertarlo a la cola
+		
+		//Se inserta la ruta a la cola
 		while(aux){
 			PushBackQ(cola,aux);
 			aux = nextList(adj);
 		}
 
+		//Si la ruta es valida, se inserta al arregloRuta
 		if(n){
-			//printf("largo: %d == %ld\n",n->largo, size(mapaIdentificacion));
 			if(n->largo == size(mapaIdentificacion)+1){
-				
-				printf("\nENTRA AL IF QUE TANTO QUERIA\n");
-				printf("[%.2lf]\n",n->distanciaTotal);
+				/*
+				printf("\n\n");
 				printf("[ ");
 				for(int i=0; i<size(mapaIdentificacion)+1 ; i++){
 					printf("%d ",n->arreglo[i]->posicion->identificacion);
 				}
 				printf("]");
+				printf(" -> [%.2lf]\n",n->distanciaTotal);
+				*/
 				arregloRuta[cont] = n;
 				cont++;
 			}
 		}
 	}
-	printf("\n TOTAL: %d\n",cont);
-	double minimo = 9999999999;
-	tipoRuta *eficiente;
+	//printf("\n TOTAL: %d\n",cont);
+
+	double minimo = 9999999999; //Servira para saber que ruta tiene la distanciaTotal minima
+	tipoRuta *eficiente; //Aqui se guardara la ruta eficiente
+
+	//Se busca cual tiene menor distanciaTotal
 	for(int k=0 ; k<cont ; k++){
-		//printf("[%.2lf]\n",arregloRuta[k]->distanciaTotal);
 		if(arregloRuta[k]->distanciaTotal < minimo){
 			minimo = arregloRuta[k]->distanciaTotal;
 			eficiente = arregloRuta[k];
 		}
 	}
-	//printf("%.2lf\n",eficiente->distanciaTotal);
+
+	//Se inserta la ruta en el mapa
 	strcpy(eficiente->nombreRuta,"ruta optima");
-	//printf("%s",eficiente->nombreRuta);
 	mostrarRuta(eficiente);
 	insertMap(mapaRutas,eficiente->nombreRuta,eficiente);
 	
-
 }
