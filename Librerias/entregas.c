@@ -72,7 +72,6 @@ void importarArchivo(HashMap * mapaIdentificacion)
 	printf("\nIngrese el nombre del archivo a importar: ");
 	getchar();
 	scanf("%49[^\n]s", nombreArchivo);
-	strcpy(nombreArchivo,"tarea3_tsp.txt"); //RECORDAR ELIMINARLO CUANDO SE ENTREGUE LA TAREA
 
 	//Se busca el archivo
 	FILE * archivo = fopen(nombreArchivo, "r");
@@ -181,7 +180,6 @@ void entregasCercanas(HashMap *mapaIdentificacion)
 				//Recorro el arreglo distancia
 				for(i = 0 ; i < 3 ; i++)
 				{
-					//printf("ENTRA2\n\n");
 					if(maximo == arreglo2[i])
 					{
 						if(distanciaEntregas < maximo)
@@ -201,7 +199,6 @@ void entregasCercanas(HashMap *mapaIdentificacion)
             }
 			else
 			{
-				//printf("\n%d cont",cont);
                 arreglo[cont] = posicionAux->identificacion;
                 arreglo2[cont] = distanciaEntregas;
 				if(maximo < distanciaEntregas) maximo = distanciaEntregas;

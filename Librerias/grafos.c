@@ -44,7 +44,6 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
 		tipoRuta * posicionAux = copia(nuevaPosicion);
 		
 		posicionAux->arreglo[largoRuta]->posicion = aux;//Se guarda la nueva posicion
-		//printf("%lli %lli %lli %lli\n", posicionAux->arreglo[largoRuta - 1]->posicion->coordenadaX, posicionAux->arreglo[largoRuta - 1]->posicion->coordenadaY, posicionAux->arreglo[largoRuta]->posicion->coordenadaX, posicionAux->arreglo[largoRuta]->posicion->coordenadaY);
 		posicionAux->largo = largoRuta + 1;//Se aumenta el largo
 
 		//Se calcula distancia entre puntos

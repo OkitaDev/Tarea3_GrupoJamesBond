@@ -188,10 +188,6 @@ void * popCurrent(List * list)
 
 	if(list->current == list->head)
 	{
-		// printf("list: %p\n",list);
-		// printf("current: %p\n",list->current);
-		// printf("next: %p\n",list->current->next);
-		// printf("prev: %p\n",list->current->next->prev);
 		if(list->current->next == NULL){
 			list->current = NULL;
 			free(list->current);
@@ -201,7 +197,6 @@ void * popCurrent(List * list)
 			free(list->current);
 			list->current = list->head;
 		}
-		
 	}
 	else
 	{
