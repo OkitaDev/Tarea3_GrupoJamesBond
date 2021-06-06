@@ -44,13 +44,13 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
 		tipoRuta * posicionAux = copia(nuevaPosicion);
 		
 		posicionAux->arreglo[largoRuta]->posicion = aux;//Se guarda la nueva posicion
+		//printf("%lli %lli %lli %lli\n", posicionAux->arreglo[largoRuta - 1]->posicion->coordenadaX, posicionAux->arreglo[largoRuta - 1]->posicion->coordenadaY, posicionAux->arreglo[largoRuta]->posicion->coordenadaX, posicionAux->arreglo[largoRuta]->posicion->coordenadaY);
 		posicionAux->largo = largoRuta + 1;//Se aumenta el largo
 
 		//Se calcula distancia entre puntos
 		posicionAux->arreglo[largoRuta]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
-		
 		//Y se aumenta el valor de distancia total
-		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta-1]->distancia;
+		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta]->distancia;
 
 		//Si es una ruta valida, se almacena en la lista
 		if(is_valid(posicionAux,largoRuta + 1)) pushBack(list,posicionAux);

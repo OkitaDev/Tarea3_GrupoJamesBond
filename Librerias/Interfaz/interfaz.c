@@ -30,7 +30,21 @@ double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long l
 	return distancia;
 }
 
-void convertirEstandar(char * nombre)
+void convertirEstandar(char * cadena)
 {
+	cadena[0] = toupper(cadena[0]);
+	for(int i = 1; i < cadena[i] != '\0';i++)
+	{
+		cadena[i] = tolower(cadena[i]);
+	} 
+}
 
+int permutacion(int size)
+{
+	int total = 1;
+	for(int i = 1; i <= size; i++)
+	{
+		total *= i;
+	}
+	return total;
 }

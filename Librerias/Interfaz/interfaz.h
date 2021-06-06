@@ -14,4 +14,8 @@ void mostrarMenu();
 //Funcion para calcular la distancia entre dos puntos
 double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long long coordenadaY1, long long coordenadaY2);
 
+//Funcion para convertir las cadenas a nuestro estandar, primera letra mayuscula, demas en minusculas
+void convertirEstandar(char *);
+
+int permutacion(int);
 #endif

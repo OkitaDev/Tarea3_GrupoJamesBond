@@ -277,7 +277,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 
 		//MUESTRO LAS OPCIONES
-		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, orden[0]->distanciaTotal);
+		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, nuevaRuta->distanciaTotal);
 		for(b = 0 ; b < largoArreglo ; b++){
 			printf(blue"%d) "reset, orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion);
 			if(orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion < 10) printf(" ");
@@ -314,7 +314,9 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	do
 	{
 		printf("\nIngrese el nombre de la nueva ruta: ");
-		scanf("%19s",nuevaRuta->nombreRuta);
+		getchar();
+		scanf("%19[^\n]s",nuevaRuta->nombreRuta);
+		convertirEstandar(nuevaRuta->nombreRuta);
 	} while (nombreRepetido(mapaRutas,nuevaRuta->nombreRuta) != 1);
 	
 	mostrarRuta(nuevaRuta);
@@ -367,7 +369,9 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	do
 	{
 		printf("\nIngrese el nombre de la nueva ruta: ");
-		scanf("%19s",nuevaRuta->nombreRuta);
+		getchar();
+		scanf("%19[^\n]s",nuevaRuta->nombreRuta);
+		convertirEstandar(nuevaRuta->nombreRuta);
 	} while (nombreRepetido(mapaRutas,nuevaRuta->nombreRuta) != 1);
 	
 	mostrarRuta(nuevaRuta);
@@ -381,6 +385,7 @@ void mejorarRuta(HashMap * mapaRutas)
 	printf("\nIngrese el nombre de la ruta: ");
 	getchar();
 	scanf("%19[^\n]s", nombreRuta);
+	convertirEstandar(nombreRuta);
 
 	//La busco dentro del mapa
 	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
@@ -529,7 +534,7 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	int cont = 0; //Llevara la cuenta para saber cuantas rutas fueron creadas
 	//En arregloRuta se insertaran las ultimas rutas creadas, las cuales seran quienes
 	//tengan todas las posiciones guardadas.
-	tipoRuta** arregloRuta = malloc(sizeof(tipoRuta));
+	tipoRuta** arregloRuta = malloc(sizeof(tipoRuta*) * permutacion(size(mapaIdentificacion) ));
 
 	while(get_size(cola) != 0){
 		//El tipoRuta n sera un auxiliar para ver los nodos adjacentes y para
@@ -539,6 +544,7 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 		PopFrontQ(cola);
 
 		List* adj = get_adj_nodes(mapaIdentificacion,n); //Obtenemos los nodos adjacentes de n
+
 		tipoRuta* aux = firstList(adj); //Esta ruta es solamente para insertarlo a la cola
 		
 		//Se inserta la ruta a la cola
@@ -550,11 +556,10 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 		//Si la ruta es valida, se inserta al arregloRuta
 		if(n){
 			if(n->largo == size(mapaIdentificacion)+1){
-				/*
-				printf("\n\n");
+				/*printf("\n\n");
 				printf("[ ");
 				for(int i=0; i<size(mapaIdentificacion)+1 ; i++){
-					printf("%d ",n->arreglo[i]->posicion->identificacion);
+					printf("%.2lf ",n->arreglo[i]->distancia);
 				}
 				printf("]");
 				printf(" -> [%.2lf]\n",n->distanciaTotal);
@@ -564,7 +569,7 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 			}
 		}
 	}
-	//printf("\n TOTAL: %d\n",cont);
+	printf("\n TOTAL: %d\n",cont);
 
 	double minimo = 9999999999; //Servira para saber que ruta tiene la distanciaTotal minima
 	tipoRuta *eficiente; //Aqui se guardara la ruta eficiente
@@ -579,6 +584,7 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 
 	//Se inserta la ruta en el mapa
 	strcpy(eficiente->nombreRuta,"ruta optima");
+	convertirEstandar(eficiente->nombreRuta);
 	mostrarRuta(eficiente);
 	insertMap(mapaRutas,eficiente->nombreRuta,eficiente);
 	
