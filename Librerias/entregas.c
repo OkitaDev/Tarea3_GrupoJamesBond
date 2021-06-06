@@ -244,24 +244,24 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 	
-	tipoRuta * imprimision = firstList(lista);
+	tipoRuta * auxRuta = firstList(lista);
 
-	while(imprimision != NULL)
+	while(auxRuta != NULL)
 	{
 		//ORDENAR
 		int largoArreglo = 0;
 		
-		imprimision = firstList(lista);
-		if(imprimision == NULL) break;
+		auxRuta = firstList(lista);
+		if(auxRuta == NULL) break;
 
 		tipoRuta* orden[size(mapaIdentificacion)];
-		while(imprimision != NULL){
-			orden[largoArreglo] = imprimision;
-			imprimision = nextList(lista);
+		while(auxRuta != NULL){
+			orden[largoArreglo] = auxRuta;
+			auxRuta = nextList(lista);
 			largoArreglo++;
 		}
 		int b;
-		imprimision = firstList(lista);
+		auxRuta = firstList(lista);
 
 		int c;
 		tipoRuta* temp;
@@ -291,23 +291,23 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		scanf("%d",&opcion);
 
 		//BUSCO LA OPCION
-		imprimision = firstList(lista);
-		while(imprimision != NULL)
+		auxRuta = firstList(lista);
+		while(auxRuta != NULL)
 		{
-			if(opcion == imprimision->arreglo[imprimision->largo-1]->posicion->identificacion) break;
-			imprimision = nextList(lista);
+			if(opcion == auxRuta->arreglo[auxRuta->largo-1]->posicion->identificacion) break;
+			auxRuta = nextList(lista);
 		}
 
 		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
-		if(imprimision != NULL)
+		if(auxRuta != NULL)
 		{
-			nuevaRuta = imprimision;
+			nuevaRuta = auxRuta;
 			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 		}
 		else 
 		{
 			printf(red"\nNo se encuentra tal entrega\n\n"reset);
-			imprimision = firstList(lista);
+			auxRuta = firstList(lista);
 		}
 	}
 	
@@ -338,32 +338,32 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 
 	//Se crea la primera lista de nodos adyacentes
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-	tipoRuta * imprimision = firstList(lista);
+	tipoRuta * auxRuta = firstList(lista);
 
-	while(imprimision != NULL)
+	while(auxRuta != NULL)
 	{
 		//Reviso que hayan posibles nodos dentro de la lista
-		imprimision = firstList(lista);
-		if(imprimision == NULL) break;
+		auxRuta = firstList(lista);
+		if(auxRuta == NULL) break;
 		
 		//Genero una posible entrega aleatoria
 		int opcion = rand() % size(mapaIdentificacion) + 1;
 
 		//BUSCO LA OPCION
-		imprimision = firstList(lista);
-		while(imprimision != NULL)
+		auxRuta = firstList(lista);
+		while(auxRuta != NULL)
 		{
-			if(opcion == imprimision->arreglo[imprimision->largo-1]->posicion->identificacion) break;
-			imprimision = nextList(lista);
+			if(opcion == auxRuta->arreglo[auxRuta->largo-1]->posicion->identificacion) break;
+			auxRuta = nextList(lista);
 		}
 
 		//Si existe la entrega y no se ha usado, se almacena en el arreglo y avanza
-		if(imprimision != NULL)
+		if(auxRuta != NULL)
 		{
-			nuevaRuta = imprimision;
+			nuevaRuta = auxRuta;
 			lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
 		}
-		else imprimision = firstList(lista);
+		else auxRuta = firstList(lista);
 	}
 	
 	do
