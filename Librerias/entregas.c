@@ -529,12 +529,8 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	//Se crea la cola para hacer una busqueda por anchura
 	Queue* cola = CreateQueue();
 	PushBackQ(cola,nuevaRuta);
-
-	
-	int cont = 0; //Llevara la cuenta para saber cuantas rutas fueron creadas
-	//En arregloRuta se insertaran las ultimas rutas creadas, las cuales seran quienes
-	//tengan todas las posiciones guardadas.
-	tipoRuta** arregloRuta = malloc(sizeof(tipoRuta*) * permutacion(size(mapaIdentificacion) ));
+	int cont = 0;
+	tipoRuta * eficiente;
 
 	while(get_size(cola) != 0){
 		//El tipoRuta n sera un auxiliar para ver los nodos adjacentes y para
@@ -554,31 +550,11 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 		}
 
 		//Si la ruta es valida, se inserta al arregloRuta
-		if(n){
-			if(n->largo == size(mapaIdentificacion)+1){
-				/*printf("\n\n");
-				printf("[ ");
-				for(int i=0; i<size(mapaIdentificacion)+1 ; i++){
-					printf("%.2lf ",n->arreglo[i]->distancia);
-				}
-				printf("]");
-				printf(" -> [%.2lf]\n",n->distanciaTotal);
-				*/
-				arregloRuta[cont] = n;
-				cont++;
-			}
-		}
-	}
-	printf("\n TOTAL: %d\n",cont);
-
-	double minimo = 9999999999; //Servira para saber que ruta tiene la distanciaTotal minima
-	tipoRuta *eficiente; //Aqui se guardara la ruta eficiente
-
-	//Se busca cual tiene menor distanciaTotal
-	for(int k=0 ; k<cont ; k++){
-		if(arregloRuta[k]->distanciaTotal < minimo){
-			minimo = arregloRuta[k]->distanciaTotal;
-			eficiente = arregloRuta[k];
+		if(n->largo == size(mapaIdentificacion) + 1)
+		{
+			if(cont == 0) eficiente = n;
+			else if(eficiente->distanciaTotal > n->distanciaTotal) eficiente = n;
+			cont++;
 		}
 	}
 
