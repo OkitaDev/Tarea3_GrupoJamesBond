@@ -63,6 +63,10 @@ int main()
 				if(tamanoIdentificacion != 0) mejorRuta(mapaIdentificacion,mapaRutas);
 				else printf(red"\nNo ha recibido entregas\n"reset);
 				break;
+			case 9:
+				if(tamanoIdentificacion != 0) mostrarCoordenadas(mapaIdentificacion);
+				else printf(red"\nNo ha recibido entregas\n"reset);
+				break;
 			default:
 				printf(red "\nNo existe tal opcion\n" reset);
 				break;

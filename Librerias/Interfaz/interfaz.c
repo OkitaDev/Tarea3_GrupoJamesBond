@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <ctype.h>
 
 #define red "\e[1;91m"
 #define green "\e[1;92m" 
@@ -17,6 +19,7 @@ void mostrarMenu()
 	printf("6. Mejorar Ruta de entregas\n");
 	printf("7. Mostrar Rutas de entregas\n");
 	printf("8. Ruta Optima de entregas\n");
+	printf("9. Mostrar Coordenadas de Entregas\n");
 	printf("0. Salir del Programa\n"reset);
 }
 
@@ -25,4 +28,9 @@ double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long l
 {
 	double distancia = sqrt(pow(coordenadaX1 - coordenadaX2, 2) + pow(coordenadaY1 - coordenadaY2, 2));
 	return distancia;
+}
+
+void convertirEstandar(char * nombre)
+{
+
 }

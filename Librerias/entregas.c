@@ -583,3 +583,16 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	insertMap(mapaRutas,eficiente->nombreRuta,eficiente);
 	
 }
+
+void mostrarCoordenadas(HashMap * mapaIdentificacion)
+{
+	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
+	printf(blue"\nLista de entregas: \n");
+	while(aux != NULL)
+	{
+		printf(green"\nIdentificacion: %i\n", aux->identificacion);
+		printf("Coordenada X: %lli Coordenada Y: %lli\n"reset, aux->coordenadaX, aux->coordenadaY);
+
+		aux = nextMap(mapaIdentificacion);
+	}
+}
