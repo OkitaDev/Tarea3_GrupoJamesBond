@@ -5,7 +5,9 @@ Integrantes
 - Jose Osega, Como aspecto positivo, mejora la eficiencia en las funciones, y buena disposición para trabajo. Como mejora, nada.
 - Bryan Lopez, Como aspecto positivo, buena disposición para trabajo y dedicó mucho tiempo en hacer funciones. Como mejora, confianza en su código, subir el código a github antes de ejecutar la función 8 con 20 entregas.
 
-Instrucción de compilador: gcc -o programa .\Librerias\Estructuras\structs.c .\Librerias\Interfaz\interfaz.c .\Librerias\TDAs\TDA_Lista\list.c .\Librerias\TDAs\TDA_Mapa\hashmap.c .\Librerias\grafos.c .\Librerias\entregas.c main.c -lm
+Instrucción de compilador 
+
+- gcc -o programa .\Librerias\Estructuras\structs.c .\Librerias\Interfaz\interfaz.c .\Librerias\TDAs\TDA_Lista\list.c .\Librerias\TDAs\TDA_Mapa\hashmap.c .\Librerias\grafos.c .\Librerias\entregas.c main.c -lm
 
 Cosas a Considerar del Código
 
