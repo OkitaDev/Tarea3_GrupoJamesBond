@@ -142,68 +142,76 @@ void distanciaEntregas(HashMap * mapaIdentificacion)
 
 void entregasCercanas(HashMap *mapaIdentificacion)
 {
-	//Ingresamos la primera coordenada (x,y)
+	//PRIMERO ENCONTRAMOS TODO LO QUE VAMOS A OCUPAR, EL ENTREGAAUX SIRVE PARA RECCORER LOS PUNTOS
 	long long coordenadaX, coordenadaY;
 	printf("\nIngrese la cordenada X: ");
 	scanf("%lli",&coordenadaX);
 	printf("\nIngrese la cordenada Y: ");
 	scanf("%lli",&coordenadaY);
 
-	//Variable que sirve para buscar en el mapa las coordenadas.
 	tipoCoordenadas * posicionAux = firstMap(mapaIdentificacion);
 
-	//En estos 2 arreglos se guardarán las 3 entregas más cercanas.
-	//Solamente el identificador y la distancia para mostrarlo por pantalla.
-    int arregloIdent[3]; //Almacena el dato identificador
-    double arregloDistancia[3];//Almacena la distancia
+	//AHORA DEFINIMOS TODO LO QUE NECESITAREMOS PARA ENCONTRAR LOS MAS CERCANOS
+    int arreglo[3]; //identificador
+    double arreglo2[3];//distancia
 
-    double distanciaEntregas; //La distancia entre el punto ingresado por el usuario y las entregas.
+    double distanciaEntregas;
+    double distanciaAux;
 
-    int cont = 0; //Llevará la cuenta para diferenciar las 3 primeras entregas (guardarlas) y las siguientes (Verificar algun cambio)
-	double maximo = 0; //Este mantendrá la distancia mayor, para ver dónde se reemplaza.
+    int cont = 0;
+	double maximo = 0;
 	int i,k;
 
-	//Se recorre el mapa para calcular las entregas más cercanas.
+	/*
+		AQUI EMPIEZA LA FUNCION PARA ENCONTRAR AL MAS CERCANO
+		lo que pense al principio es ir encontrando los mas cercanos y guardarlos
+		en un arreglo, pero como pide mostrar el ID y la distancia, ocupo 2.
+		quizas se pueda hacer mejor, pero es una idea.
+	*/
+
     while(posicionAux != NULL)
 	{
         distanciaEntregas = distanciaDosPuntos(coordenadaX, posicionAux->coordenadaX, coordenadaY, posicionAux->coordenadaY);
 
-        if(cont != 0) //Aqui se evalua todas las entregas, excepto la primera.
+        if(cont != 0)
 		{
-            if(cont > 2) //Después de almacenar los 3 datos, se mira el caso en que haya una entrega más cercana.
+            if(cont > 2)
 			{
+				//Recorro el arreglo distancia
 				for(i = 0 ; i < 3 ; i++)
 				{
-					if(maximo == arregloDistancia[i]) //Encuentro la posición que tiene mayor distancia
+					if(maximo == arreglo2[i])
 					{
-						if(distanciaEntregas < maximo) //Si la distancia de la otra entrega es menor, se realiza el cambio.
+						if(distanciaEntregas < maximo)
 						{
-							arregloIdent[i] = posicionAux->identificacion;
-							arregloDistancia[i] = distanciaEntregas;
+							arreglo[i] = posicionAux->identificacion;
+							arreglo2[i] = distanciaEntregas;
 
-							//Encontrar otra distancia mayor.
+							//Encontrar otro maximo
 							maximo = 0;
 							for(k = 0 ; k < 3 ; k++)
-								if(maximo < arregloDistancia[k]) maximo = arregloDistancia[k];
+								if(maximo < arreglo2[k])	maximo = arreglo2[k];
 							
 							break;
 						}
 					}
 				}
             }
-			else //Los primeros 3 datos se guardarán en el arreglo.
+			else
 			{
-                arregloIdent[cont] = posicionAux->identificacion;
-                arregloDistancia[cont] = distanciaEntregas;
+                arreglo[cont] = posicionAux->identificacion;
+                arreglo2[cont] = distanciaEntregas;
 				if(maximo < distanciaEntregas) maximo = distanciaEntregas;
             }
         }
-		else //Aqui se guarda el primer dato que entra.
+		else
 		{
-            arregloIdent[0] = posicionAux->identificacion;
-            arregloDistancia[0] = distanciaEntregas;
+            arreglo[0] = posicionAux->identificacion;
+            arreglo2[0] = distanciaEntregas;
 			maximo = distanciaEntregas;
         }
+        
+		distanciaAux = distanciaEntregas;
         posicionAux = nextMap(mapaIdentificacion);
 		cont++;
     }
@@ -212,29 +220,27 @@ void entregasCercanas(HashMap *mapaIdentificacion)
 	printf(green"\n\nLas distancias mas cercanas a la posicion ingresada son:\n");
 	
 	int largo = 3; 
-	//Esto sirve para cuando no hay más de 3 entregas almacenadas.
+	//Esto sirve para cuando no hay mas de 5 lugares
 	if(cont < 3) largo = cont;
 
 	for(i = 0 ; i < largo ; i++)
-		printf("\nID: %d con distancia %.2lf",arregloIdent[i],arregloDistancia[i]);
+		printf("\nID: %d con distancia %.2lf",arreglo[i],arreglo2[i]);
 	
 	printf("\n"reset);
 }
 
 void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
-	//Se crea la ruta que almacenera
 	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
-	//Se leen las coordenadas de la posicion inicial
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaY);
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 	
-	//Se crea la primera lista de nodos adyacentes
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
+	
 	tipoRuta * auxRuta = firstList(lista);
 
 	while(auxRuta != NULL)
@@ -242,21 +248,19 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		//ORDENAR
 		int largoArreglo = 0;
 		
-		//Reviso que hayan posibles nodos dentro de la lista
 		auxRuta = firstList(lista);
 		if(auxRuta == NULL) break;
 
-		// Se almacenan los posibles nodos adyacentes al arreglo
 		tipoRuta* orden[size(mapaIdentificacion)];
 		while(auxRuta != NULL){
 			orden[largoArreglo] = auxRuta;
 			auxRuta = nextList(lista);
 			largoArreglo++;
 		}
-
-		//Se ordenan las posibles rutas dependiendo de la distancia.
+		int b;
 		auxRuta = firstList(lista);
-		int b, c;
+
+		int c;
 		tipoRuta* temp;
 		for(b=0 ; b<largoArreglo-1 ; b++){
 			for(c=b ; c<largoArreglo ; c++){
@@ -273,12 +277,12 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, nuevaRuta->distanciaTotal);
 		for(b = 0 ; b < largoArreglo ; b++){
 			printf(blue"%d) "reset, orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion);
-			if(orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion < 10) printf(" "); //Para que se vea mas bonito.
+			if(orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion < 10) printf(" ");
 			printf("Distancia : %.2lf",orden[b]->arreglo[orden[b]->largo-1]->distancia);
 			printf("\n");
 		}
 		
-		// El usuario ingresa la opcion.
+
 		printf("\nEl ID que elija es: ");
 		int opcion;
 		scanf("%d",&opcion);
@@ -304,7 +308,6 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		}
 	}
 	
-	//Se guardará la ruta en el mapa.
 	do
 	{
 		printf("\nIngrese el nombre de la nueva ruta: ");
@@ -312,7 +315,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		scanf("%19[^\n]s",nuevaRuta->nombreRuta);
 		convertirEstandar(nuevaRuta->nombreRuta);
 	} while (nombreRepetido(mapaRutas,nuevaRuta->nombreRuta) != 1);
-	
+
 	mostrarRuta(nuevaRuta);
 	insertMap(mapaRutas,nuevaRuta->nombreRuta,nuevaRuta);
 	
@@ -380,7 +383,13 @@ void mejorarRuta(HashMap * mapaRutas)
 	getchar();
 	scanf("%19[^\n]s", nombreRuta);
 	convertirEstandar(nombreRuta);
-
+	
+	if(strcmp(nombreRuta, "Ruta optima") == 0)
+	{
+		printf(blue"\nEs la mejor ruta, no es necesario modificarla\n"reset);
+		return;
+	}
+	
 	//La busco dentro del mapa
 	tipoRuta * aux = searchMap(mapaRutas, nombreRuta);
 
@@ -553,6 +562,7 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 	}
 
 	//Se inserta la ruta en el mapa
+	printf(blue"\nSe debio hacer un total de %i combinaciones\n", cont);
 	strcpy(eficiente->nombreRuta,"ruta optima");
 	convertirEstandar(eficiente->nombreRuta);
 	mostrarRuta(eficiente);

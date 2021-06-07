@@ -48,13 +48,13 @@ List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
 
 		//Se calcula distancia entre puntos
 		posicionAux->arreglo[largoRuta]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
+
 		//Y se aumenta el valor de distancia total
 		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta]->distancia;
-
+		
 		//Si es una ruta valida, se almacena en la lista
-		if(is_valid(posicionAux,largoRuta + 1)) pushBack(list,posicionAux);
+		if(is_valid(posicionAux,posicionAux->largo) == 1) pushBack(list,posicionAux);
 		aux = nextMap(mapaIdentificacion);
 	}
-
 	return list;
 }

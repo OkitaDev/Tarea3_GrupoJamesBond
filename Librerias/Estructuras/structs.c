@@ -28,43 +28,28 @@ typedef struct tipoRuta
 
 tipoCoordenadas * crearTipoCoordenadas()
 {
-    tipoCoordenadas * nuevo =(tipoCoordenadas*) malloc (sizeof(tipoCoordenadas));
-	if(nuevo == NULL) return NULL;
+    tipoCoordenadas * nuevo = malloc (sizeof(tipoCoordenadas));
 	return nuevo;
 }
 
 tipoEntregas * crearTipoEntregas()
 {
-	tipoEntregas * nuevo =(tipoEntregas*) malloc(sizeof(tipoEntregas));
-	if(nuevo == NULL) return NULL;
+	tipoEntregas * nuevo = malloc (sizeof(tipoEntregas));
 	nuevo->posicion = crearTipoCoordenadas();
-	if(nuevo->posicion == NULL)
-	{
-		free(nuevo);
-		return NULL;
-	}
 	return nuevo;
 }
 
 tipoRuta * crearTipoRuta(int capacidad)
 {
-    tipoRuta * nuevaRuta =(tipoRuta*) malloc (sizeof(tipoRuta));
-	if(nuevaRuta == NULL) return NULL;
-	nuevaRuta->arreglo =(tipoEntregas**) malloc(sizeof(tipoEntregas*) * capacidad);
-    if(nuevaRuta->arreglo == NULL)
-	{
-		free(nuevaRuta);
-		return NULL;
-	}
+    tipoRuta * nuevaRuta = malloc (sizeof(tipoRuta));
+	nuevaRuta->arreglo = malloc (sizeof(tipoEntregas) * capacidad);
 	nuevaRuta->distanciaTotal = 0;
     nuevaRuta->largo = 1;
 
-	int i;
-	for(i=0 ; i<capacidad + 1; i++){
+	for(int i = 0 ; i < capacidad + 1; i++){
 		nuevaRuta->arreglo[i] = crearTipoEntregas();
-
-	}
-    return nuevaRuta;
+	}    
+	return nuevaRuta;
 }
 
 void cambioEntrega(tipoRuta * aux, int posicion1, int posicion2)

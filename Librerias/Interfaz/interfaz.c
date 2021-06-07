@@ -11,6 +11,9 @@
 
 void mostrarMenu()
 {
+	printf(blue"\n ______________________________\n");
+	printf("| EL EMPRENDIMIENTO DE JAVIERA |\n");
+	printf(" ------------------------------\n");
 	printf(yellow"\n1. Importar Archivo\n");
 	printf("2. Distancia entre entregas\n");
 	printf("3. Mostrar 3 entregas mas cercanas\n");
@@ -37,14 +40,4 @@ void convertirEstandar(char * cadena)
 	{
 		cadena[i] = tolower(cadena[i]);
 	} 
-}
-
-int permutacion(int size)
-{
-	int total = 1;
-	for(int i = 1; i <= size; i++)
-	{
-		total *= i;
-	}
-	return total;
 }
