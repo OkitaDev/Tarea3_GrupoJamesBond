@@ -233,6 +233,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 {
 	tipoRuta* nuevaRuta = crearTipoRuta(size(mapaIdentificacion));
 
+	//Ingreso de datos
 	printf("\nIngrese la coordenada X: ");
 	scanf("%lld",&nuevaRuta->arreglo[0]->posicion->coordenadaX);
 	printf("\nIngrese la coordenada Y: ");
@@ -240,12 +241,11 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 	nuevaRuta->arreglo[0]->posicion->identificacion = 0;
 	
 	List* lista = get_adj_nodes(mapaIdentificacion,nuevaRuta);
-	
 	tipoRuta * auxRuta = firstList(lista);
 
 	while(auxRuta != NULL)
 	{
-		//ORDENAR
+		//Ordenar la entregas a través de la de menor distancia, a la de mayor
 		int largoArreglo = 0;
 		
 		auxRuta = firstList(lista);
@@ -273,7 +273,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		}
 
 
-		//MUESTRO LAS OPCIONES
+		//Muestro las entregas que puede elejir el usuario
 		printf(yellow"\nLista de entregas(Distancia total hasta el momento %.2lf): \n"reset, nuevaRuta->distanciaTotal);
 		for(b = 0 ; b < largoArreglo ; b++){
 			printf(blue"%d) "reset, orden[b]->arreglo[orden[b]->largo-1]->posicion->identificacion);
@@ -282,12 +282,11 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 			printf("\n");
 		}
 		
-
 		printf("\nEl ID que elija es: ");
 		int opcion;
 		scanf("%d",&opcion);
 
-		//BUSCO LA OPCION
+		//Busco la opcion que ingreso el usuario
 		auxRuta = firstList(lista);
 		while(auxRuta != NULL)
 		{
@@ -308,6 +307,7 @@ void crearRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		}
 	}
 	
+	//Se ingresa el nombre de la ruta, verificando que no se este usando
 	do
 	{
 		printf("\nIngrese el nombre de la nueva ruta: ");
@@ -363,6 +363,7 @@ void crearRutaAleatoria(HashMap * mapaIdentificacion, HashMap * mapaRutas)
 		else auxRuta = firstList(lista);
 	}
 	
+	//Se ingresa el nombre de la ruta, verificando que no se este usando
 	do
 	{
 		printf("\nIngrese el nombre de la nueva ruta: ");
@@ -384,6 +385,7 @@ void mejorarRuta(HashMap * mapaRutas)
 	scanf("%19[^\n]s", nombreRuta);
 	convertirEstandar(nombreRuta);
 	
+	//Si la ruta es optima, se indica que no es necesario hacerle nada
 	if(strcmp(nombreRuta, "Ruta optima") == 0)
 	{
 		printf(blue"\nEs la mejor ruta, no es necesario modificarla\n"reset);
@@ -573,7 +575,9 @@ void mejorRuta(HashMap * mapaIdentificacion, HashMap * mapaRutas){
 void mostrarCoordenadas(HashMap * mapaIdentificacion)
 {
 	tipoCoordenadas * aux = firstMap(mapaIdentificacion);
+
 	printf(blue"\nLista de entregas: \n");
+
 	while(aux != NULL)
 	{
 		printf(green"\nIdentificacion: %i\n", aux->identificacion);

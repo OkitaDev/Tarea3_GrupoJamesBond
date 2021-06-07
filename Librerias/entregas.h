@@ -25,5 +25,6 @@ void mostrarRutas(HashMap *);
 //Funcion para calcular y mostrar la mejor ruta
 void mejorRuta(HashMap *, HashMap *);
 
+//Funcion para mostrar las coordenadas de la entregas que se ingresaron (Función hecha para comprobar)
 void mostrarCoordenadas(HashMap *);
 #endif

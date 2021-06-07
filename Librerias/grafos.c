@@ -21,39 +21,39 @@ short is_valid(tipoRuta * nodo,int tamano)
 }
 
 //Funcion para copiar informacion entre rutas
-tipoRuta* copia(tipoRuta* nuevaPosicion)
+tipoRuta* copia(tipoRuta* nuevaRuta)
 {
-	tipoRuta* posicionAux = crearTipoRuta(nuevaPosicion->largo);
-	for(int c = 0 ; c < nuevaPosicion->largo ; c++)
-		posicionAux->arreglo[c] = nuevaPosicion->arreglo[c];
+	tipoRuta* posicionAux = crearTipoRuta(nuevaRuta->largo);
+	for(int c = 0 ; c < nuevaRuta->largo ; c++)
+		posicionAux->arreglo[c] = nuevaRuta->arreglo[c];
 
-	posicionAux->distanciaTotal = nuevaPosicion->distanciaTotal;
+	posicionAux->distanciaTotal = nuevaRuta->distanciaTotal;
 	return posicionAux;
 }
 
 //Funcion para obtener las entregas, con sus respectivas distancias
-List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaPosicion)
+List * get_adj_nodes(HashMap * mapaIdentificacion, tipoRuta * nuevaRuta)
 {
 	List* list = createList(); //Se crea la lista
 	tipoCoordenadas * aux = firstMap(mapaIdentificacion); 
-	int largoRuta = nuevaPosicion->largo;//Se guarda el largo de la ruta
+	int largoRuta = nuevaRuta->largo;//Se guarda el largo de la ruta
 
 	while(aux != NULL)
 	{
 		//Se copia la información
-		tipoRuta * posicionAux = copia(nuevaPosicion);
+		tipoRuta * rutaAux = copia(nuevaRuta);
 		
-		posicionAux->arreglo[largoRuta]->posicion = aux;//Se guarda la nueva posicion
-		posicionAux->largo = largoRuta + 1;//Se aumenta el largo
+		rutaAux->arreglo[largoRuta]->posicion = aux;//Se guarda la nueva posicion
+		rutaAux->largo = largoRuta + 1;//Se aumenta el largo
 
 		//Se calcula distancia entre puntos
-		posicionAux->arreglo[largoRuta]->distancia = distanciaDosPuntos(aux->coordenadaX,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,posicionAux->arreglo[largoRuta-1]->posicion->coordenadaY);
+		rutaAux->arreglo[largoRuta]->distancia = distanciaDosPuntos(aux->coordenadaX,rutaAux->arreglo[largoRuta-1]->posicion->coordenadaX,aux->coordenadaY,rutaAux->arreglo[largoRuta-1]->posicion->coordenadaY);
 
 		//Y se aumenta el valor de distancia total
-		posicionAux->distanciaTotal += posicionAux->arreglo[largoRuta]->distancia;
+		rutaAux->distanciaTotal += rutaAux->arreglo[largoRuta]->distancia;
 		
 		//Si es una ruta valida, se almacena en la lista
-		if(is_valid(posicionAux,posicionAux->largo) == 1) pushBack(list,posicionAux);
+		if(is_valid(rutaAux,rutaAux->largo) == 1) pushBack(list,rutaAux);
 		aux = nextMap(mapaIdentificacion);
 	}
 	return list;

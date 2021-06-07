@@ -17,5 +17,4 @@ double distanciaDosPuntos(long long coordenadaX1, long long coordenadaX2, long l
 //Funcion para convertir las cadenas a nuestro estandar, primera letra mayuscula, demas en minusculas
 void convertirEstandar(char *);
 
-int permutacion(int);
 #endif
